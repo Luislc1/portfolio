@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luis Carlos — Desenvolvedor Flutter</title>
+<meta name="description" content="Luis Carlos de Queiroz Silva — Engenheiro de Software especializado em Flutter. 3 apps em produção, telemetria industrial em tempo real e arquitetura ponta a ponta.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Base preta profunda */
+  --ink:#000000;
+  --ink-2:#070709;
+  --ink-3:#0d0d11;
+  
+  /* Vidro e bordas */
+  --glass:rgba(255,255,255,.035);
+  --glass-2:rgba(255,255,255,.018);
+  --stroke:rgba(255,255,255,.08);
+  --stroke-soft:rgba(255,255,255,.04);
+  
+  /* Texto: branco para destaque, cinzas para o resto */
+  --text:#f0f0f5;
+  --text-strong:#ffffff;
+  --muted:#9a9aa5;
+  --dim:#5c5c68;
+  --dim-2:#3a3a42;
+  
+  /* Acentos coloridos pontuais */
+  --accent:#7aa2f7;        /* azul suave */
+  --accent-deep:#3d5a9e;
+  --accent-glow:rgba(122,162,247,.20);
+  
+  --mint:#4fd1a5;          /* verde suave para status */
+  --coral:#f7768e;         /* coral para alertas */
+  --gold:#e0af68;          /* dourado para badges */
+  
+  /* Glows */
+  --glow-a:rgba(122,162,247,.18);
+  --glow-b:rgba(187,154,247,.10);
+  --glow-c:rgba(79,209,165,.08);
+  
+  --radius:20px;
+  --maxw:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--ink);color:var(--text);
+  font-family:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.025em;line-height:1.08}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+/* ---------- ambiente: luzes, grão, brilho do cursor ---------- */
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.45}
+.orb-1{width:640px;height:640px;top:-260px;left:-160px;background:radial-gradient(circle,var(--glow-a),transparent 68%)}
+.orb-2{width:560px;height:560px;top:22%;right:-220px;background:radial-gradient(circle,var(--glow-b),transparent 70%)}
+.orb-3{width:700px;height:700px;bottom:-320px;left:35%;background:radial-gradient(circle,var(--glow-c),transparent 70%)}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.35;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+.cursor-light{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(420px circle at var(--px,50%) var(--py,-20%),rgba(122,162,247,.07),transparent 62%);
+  transition:opacity .4s ease}
+main,header,footer{position:relative;z-index:2}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:50;
+  display:flex;align-items:center;gap:6px;padding:7px 8px 7px 18px;
+  border:1px solid var(--stroke);border-radius:100px;
+  background:rgba(5,5,8,.75);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
+  box-shadow:0 12px 40px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.05);
+  opacity:0;animation:navIn .9s cubic-bezier(.2,.7,.2,1) .9s forwards}
+@keyframes navIn{from{opacity:0;transform:translateX(-50%) translateY(-14px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.nav-mark{font-size:14px;font-weight:600;letter-spacing:-.01em;margin-right:10px;white-space:nowrap;color:var(--text-strong)}
+.nav-mark span{color:var(--dim);font-weight:400}
+.nav a.link{padding:8px 13px;border-radius:100px;font-size:14px;color:var(--muted);transition:color .25s,background .25s}
+.nav a.link:hover{color:var(--text-strong);background:rgba(255,255,255,.05)}
+.nav .cta{padding:8px 15px;border-radius:100px;font-size:14px;font-weight:500;color:#0a0a0f;
+  background:linear-gradient(180deg,#e8e8f0,#b0b0c0);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.nav .cta:hover{filter:brightness(1.1)}
+@media(max-width:760px){.nav a.link{display:none}.nav{padding:7px 8px 7px 16px}}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+section{padding:120px 0}
+@media(max-width:760px){section{padding:84px 0}.wrap{padding:0 20px}}
+.eyebrow{font-size:13px;color:var(--dim);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:1px;background:linear-gradient(90deg,var(--accent),transparent)}
+h2{font-size:clamp(28px,4vw,42px);margin-bottom:16px;color:var(--text-strong)}
+.lead{color:var(--muted);max-width:60ch}
+
+/* ---------- glass ---------- */
+.glass{
+  position:relative;border:1px solid var(--stroke);border-radius:var(--radius);
+  background:linear-gradient(160deg,var(--glass),var(--glass-2));
+  backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
+  box-shadow:0 24px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.05);
+  overflow:hidden;
+}
+.glass::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .45s ease;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.06),transparent 60%)}
+.glass:hover::after{opacity:1}
+
+/* ---------- hero ---------- */
+.hero{padding-top:170px;padding-bottom:110px;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
+@media(max-width:940px){.hero{grid-template-columns:1fr;gap:56px;padding-top:140px}}
+.hero h1{font-size:clamp(38px,6.2vw,66px);letter-spacing:-.04em;color:var(--text-strong)}
+.hero h1 em{font-style:normal;color:var(--muted)}
+.hero .sub{margin-top:24px;color:var(--muted);font-size:clamp(16px,1.6vw,19px);max-width:52ch}
+.status{display:inline-flex;align-items:center;gap:9px;font-size:13.5px;color:var(--muted);
+  border:1px solid var(--stroke);border-radius:100px;padding:6px 14px 6px 11px;margin-bottom:28px;
+  background:rgba(255,255,255,.025);backdrop-filter:blur(10px)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 0 rgba(79,209,165,.5);animation:pulse 2.6s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(79,209,165,0)}100%{box-shadow:0 0 0 0 rgba(79,209,165,0)}}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:38px}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:100px;font-size:15px;font-weight:500;
+  border:1px solid var(--stroke);transition:transform .3s cubic-bezier(.2,.7,.2,1),background .3s,border-color .3s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{color:#0a0a0f;background:linear-gradient(180deg,#f0f0f8,#c8c8d8);border-color:transparent;
+  box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.btn-primary:hover{box-shadow:0 14px 38px rgba(0,0,0,.55)}
+.btn-ghost{color:var(--text);background:rgba(255,255,255,.03);backdrop-filter:blur(10px)}
+.btn-ghost:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+.btn svg{width:16px;height:16px}
+
+/* ---------- device ---------- */
+.device-stage{display:flex;justify-content:center;perspective:1400px}
+.device{width:286px;height:582px;border-radius:44px;padding:11px;
+  border:1px solid rgba(255,255,255,.10);
+  background:linear-gradient(150deg,rgba(255,255,255,.10),rgba(255,255,255,.02) 40%,rgba(255,255,255,.05));
+  box-shadow:0 50px 100px rgba(0,0,0,.8),0 0 0 1px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.15);
+  transform:rotateY(-13deg) rotateX(4deg) translateZ(0);
+  animation:floaty 9s ease-in-out infinite;position:relative;overflow:hidden}
+@keyframes floaty{0%,100%{transform:rotateY(-13deg) rotateX(4deg) translateY(0)}50%{transform:rotateY(-11deg) rotateX(3deg) translateY(-14px)}}
+.device::before{
+  content:"";position:absolute;top:-40%;left:-60%;width:60%;height:190%;z-index:3;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.08),transparent);
+  transform:rotate(12deg);animation:sweep 7s ease-in-out infinite}
+@keyframes sweep{0%{left:-60%}55%,100%{left:130%}}
+.screen{width:100%;height:100%;border-radius:34px;background:linear-gradient(180deg,#08080c,#040406);
+  border:1px solid rgba(255,255,255,.05);padding:20px 18px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.scr-top{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--dim);font-family:"JetBrains Mono",monospace}
+.scr-title{font-size:17px;font-weight:600;letter-spacing:-.02em;color:var(--text-strong)}
+.scr-title small{display:block;font-size:11.5px;color:var(--dim);font-weight:400;letter-spacing:0;margin-top:3px}
+.chart-card{border:1px solid rgba(255,255,255,.06);border-radius:16px;background:rgba(255,255,255,.02);padding:12px 12px 6px}
+.chart-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.chart-val{font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--text-strong)}
+.chart-val b{font-size:12px;color:var(--dim);font-weight:400;margin-left:2px}
+.chart-tag{font-size:10.5px;color:var(--mint);border:1px solid rgba(79,209,165,.25);border-radius:6px;padding:2px 6px;background:rgba(79,209,165,.06)}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.metric{border:1px solid rgba(255,255,255,.05);border-radius:14px;background:rgba(255,255,255,.02);padding:11px}
+.metric span{display:block;font-size:10.5px;color:var(--dim)}
+.metric strong{font-size:16px;font-weight:600;letter-spacing:-.02em;color:var(--text-strong)}
+.rows{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.row{display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.04);border-radius:13px;
+  background:rgba(255,255,255,.015);padding:10px 11px;opacity:0;animation:rowIn .7s cubic-bezier(.2,.7,.2,1) forwards}
+.row:nth-child(1){animation-delay:1.5s}.row:nth-child(2){animation-delay:1.68s}.row:nth-child(3){animation-delay:1.86s}
+@keyframes rowIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.row i{width:6px;height:26px;border-radius:4px;background:linear-gradient(180deg,var(--accent),var(--accent-deep));flex:none}
+.row.warn i{background:linear-gradient(180deg,var(--coral),#b04a5e)}
+.row p{font-size:12px;line-height:1.35}
+.row p b{display:block;font-weight:500;color:var(--text-strong)}
+.row p em{font-style:normal;color:var(--dim);font-size:10.5px}
+.tabbar{margin-top:auto;display:flex;justify-content:space-around;padding-top:12px;border-top:1px solid rgba(255,255,255,.04)}
+.tabbar div{width:20px;height:3px;border-radius:2px;background:rgba(255,255,255,.08)}
+.tabbar div:first-child{background:var(--accent)}
+
+/* ---------- mockups compactos ---------- */
+.device.sm{width:216px;height:440px;padding:8px;border-radius:34px;animation-duration:10.5s}
+.device.sm .screen{border-radius:26px;padding:16px 14px;gap:11px}
+.device-mini-wrap{flex:none;display:flex;justify-content:center}
+@keyframes sweepX{0%{transform:translateX(-140%) rotate(12deg)}55%,100%{transform:translateX(230%) rotate(12deg)}}
+
+.brand-dot{width:7px;height:7px;border-radius:50%;background:var(--coral);box-shadow:0 0 10px rgba(247,118,142,.6);flex:none}
+.ticket-art{position:relative;height:118px;border-radius:14px;overflow:hidden;
+  background:radial-gradient(120% 140% at 28% 18%,rgba(247,118,142,.15),transparent 62%),linear-gradient(160deg,#0c0c10,#060608);
+  border:1px solid rgba(247,118,142,.10)}
+.ticket-art::after{content:"";position:absolute;top:-30%;left:0;width:36%;height:170%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.06),transparent);animation:sweepX 6.5s ease-in-out infinite}
+.ticket-date{position:absolute;top:10px;left:10px;font-size:10px;background:rgba(0,0,0,.7);padding:4px 8px;
+  border-radius:7px;border:1px solid rgba(255,255,255,.08);font-family:"JetBrains Mono",monospace;color:var(--muted)}
+.ticket-info{display:flex;flex-direction:column;gap:3px}
+.ticket-info .tag{font-size:10px;color:var(--coral);letter-spacing:.04em}
+.ticket-info strong{font-size:17px;font-weight:600;letter-spacing:-.01em;color:var(--text-strong)}
+.ticket-info small{color:var(--dim);font-size:12px}
+.ticket-price{display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid rgba(255,255,255,.04);padding-top:11px;margin-top:auto}
+.ticket-price span{font-size:11px;color:var(--dim)}
+.ticket-price strong{font-size:16px;font-weight:600;color:var(--text-strong)}
+
+.field{display:flex;flex-direction:column;gap:5px}
+.field-label{font-size:10.5px;color:var(--dim)}
+.field-box{border:1px solid rgba(255,255,255,.06);border-radius:11px;background:rgba(255,255,255,.02);
+  padding:9px 11px;font-size:12px;color:var(--muted)}
+.field-box.tall{height:50px;display:flex;align-items:flex-start}
+.btn-row{display:flex;gap:8px;margin-top:2px}
+.mini-btn{flex:1;text-align:center;font-size:12px;padding:9px 0;border-radius:10px;border:1px solid var(--stroke);color:var(--muted)}
+.mini-btn.mint{color:#061a13;background:linear-gradient(180deg,#a0e8cf,#3ab88a);border-color:transparent;font-weight:500}
+.mini-btn.azure{color:#0a0f1f;background:linear-gradient(180deg,#c8d8f8,#7a9de0);border-color:transparent;font-weight:500}
+.toast-mini{display:flex;align-items:center;gap:9px;border:1px solid rgba(79,209,165,.18);border-radius:12px;
+  background:rgba(79,209,165,.04);padding:9px 11px;margin-top:auto;opacity:0;animation:rowIn .7s cubic-bezier(.2,.7,.2,1) 1.7s forwards}
+.toast-mini i{width:6px;height:6px;border-radius:50%;background:var(--mint);flex:none;box-shadow:0 0 8px rgba(79,209,165,.5)}
+.toast-mini p{font-size:11.5px}
+.toast-mini p b{display:block;font-weight:500;color:var(--text-strong)}
+.toast-mini p em{font-style:normal;color:var(--dim);font-size:10px}
+
+.mux-logo{width:50px;height:50px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle,#5a7fd4,#1e3a6e);box-shadow:0 0 24px rgba(90,127,212,.4);animation:pulse 3s infinite}
+.mux-logo span{font-size:10.5px;font-weight:700;color:#fff;letter-spacing:.03em}
+.mux-title{text-align:center;margin-top:2px}
+.mux-title small{display:block;color:var(--dim);font-size:11.5px;font-weight:400;margin-top:3px}
+
+/* ---------- números ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--stroke-soft);border-bottom:1px solid var(--stroke-soft)}
+.stat{padding:30px 26px;border-left:1px solid var(--stroke-soft)}
+.stat:first-child{border-left:0;padding-left:0}
+.stat strong{display:block;font-size:34px;font-weight:600;letter-spacing:-.03em;color:var(--text-strong)}
+.stat span{font-size:14px;color:var(--muted)}
+@media(max-width:760px){.stats{grid-template-columns:1fr}.stat{border-left:0;border-top:1px solid var(--stroke-soft);padding:22px 0}.stat:first-child{border-top:0}}
+
+/* ---------- sobre ---------- */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+@media(max-width:940px){.about{grid-template-columns:1fr;gap:34px}}
+.about-list{display:flex;flex-direction:column;gap:2px}
+.about-item{padding:20px 0;border-top:1px solid var(--stroke-soft)}
+.about-item h3{font-size:17px;font-weight:600;margin-bottom:6px;color:var(--text-strong)}
+.about-item p{color:var(--muted);font-size:15.5px}
+
+/* ---------- projetos ---------- */
+.projects{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:940px){.projects{grid-template-columns:1fr}}
+.card{padding:30px;display:flex;flex-direction:column;gap:14px;transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s}
+.card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.15)}
+.card.feature{grid-column:1/-1;flex-direction:row;gap:40px;align-items:flex-start}
+@media(max-width:940px){.card.feature{flex-direction:column!important;gap:16px}.device-mini-wrap{order:-1}}
+.card.feature .card-body{flex:1}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.card h3{font-size:22px;color:var(--text-strong)}
+.card .role{font-size:13px;color:var(--dim);margin-top:5px;font-family:"JetBrains Mono",monospace}
+.card p.desc{color:var(--muted);font-size:15.5px}
+.badge{flex:none;font-size:11.5px;color:var(--accent);border:1px solid rgba(122,162,247,.22);
+  background:rgba(122,162,247,.06);border-radius:100px;padding:4px 11px;white-space:nowrap}
+.badge.live{color:var(--mint);border-color:rgba(79,209,165,.22);background:rgba(79,209,165,.06)}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+.chip{font-size:12.5px;color:var(--muted);border:1px solid var(--stroke-soft);border-radius:8px;padding:4px 9px;background:rgba(255,255,255,.02)}
+.card-links{display:flex;flex-wrap:wrap;gap:16px;margin-top:6px}
+.card-links a{font-size:14px;color:var(--accent);border-bottom:1px solid rgba(122,162,247,.25);padding-bottom:2px;transition:border-color .3s,color .3s}
+.card-links a:hover{color:#fff;border-color:#fff}
+.highlights{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px}
+.highlights li{position:relative;padding-left:18px;color:var(--muted);font-size:15px}
+.highlights li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 12px rgba(122,162,247,.5)}
+
+/* ---------- stack ---------- */
+.stack{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:940px){.stack{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.stack{grid-template-columns:1fr}}
+.stack .glass{padding:24px}
+.stack h3{font-size:15px;margin-bottom:14px;color:var(--text-strong)}
+.stack ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.stack li{font-size:14.5px;color:var(--muted)}
+
+/* ---------- trilha ---------- */
+.track{display:flex;flex-direction:column}
+.track-item{display:grid;grid-template-columns:190px 1fr;gap:32px;padding:26px 0;border-top:1px solid var(--stroke-soft)}
+@media(max-width:760px){.track-item{grid-template-columns:1fr;gap:6px}}
+.track-when{font-size:14px;color:var(--dim);font-family:"JetBrains Mono",monospace}
+.track h3{font-size:19px;margin-bottom:6px;color:var(--text-strong)}
+.track p{color:var(--muted);font-size:15.5px}
+
+/* ---------- contato ---------- */
+.contact{padding:56px;text-align:center}
+.contact h2{margin-bottom:14px}
+.contact .lead{margin:0 auto}
+.contact-links{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:34px}
+footer{padding:44px 0 56px;border-top:1px solid var(--stroke-soft);margin-top:90px;
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--dim)}
+
+/* ---------- entradas ---------- */
+.rise{opacity:0;transform:translateY(22px);filter:blur(6px)}
+.rise.seen{opacity:1;transform:none;filter:none;
+  transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1),filter .9s}
+.hero .anim{opacity:0;animation:heroIn 1.1s cubic-bezier(.2,.7,.2,1) forwards}
+.hero .anim:nth-child(1){animation-delay:.15s}
+.hero .anim:nth-child(2){animation-delay:.27s}
+.hero .anim:nth-child(3){animation-delay:.39s}
+.hero .anim:nth-child(4){animation-delay:.51s}
+.device-stage{opacity:0;animation:heroIn 1.4s cubic-bezier(.2,.7,.2,1) .55s forwards}
+@keyframes heroIn{from{opacity:0;transform:translateY(26px);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rise{opacity:1;transform:none;filter:none}
+  .hero .anim,.device-stage,.nav,.row{opacity:1}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true">
+  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+</div>
+<div class="cursor-light" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="nav" aria-label="Navegação principal">
+  <span class="nav-mark">Luis Carlos <span>· Flutter</span></span>
+  <a class="link" href="#projetos">Projetos</a>
+  <a class="link" href="#stack">Stack</a>
+  <a class="link" href="#trajetoria">Trajetória</a>
+  <a class="cta" href="#contato">Contato</a>
+</nav>
+
+<main>
+<header class="wrap hero">
+  <div>
+    <div class="anim"><span class="status"><span class="dot"></span>Aberto a vagas de desenvolvedor Flutter</span></div>
+    <h1 class="anim">Apps Flutter em produção, <em>do design system ao deploy.</em></h1>
+    <p class="sub anim">Sou Luis Carlos, engenheiro de software em Rio Verde (GO). Publiquei 3 aplicações nas lojas da Apple e do Google e hoje sou o único desenvolvedor da Comber Indústria — defino a arquitetura, escrevo o app e sustento a infraestrutura que ele usa.</p>
+    <div class="actions anim">
+      <a class="btn btn-primary" href="#projetos">Ver projetos</a>
+      <a class="btn btn-ghost" href="mailto:luiscqueiroz4@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>
+        luiscqueiroz4@gmail.com
+      </a>
+    </div>
+  </div>
+
+  <div class="device-stage" aria-hidden="true">
+    <div class="device">
+      <div class="screen">
+        <div class="scr-top"><span>09:41</span><span>MQTT · online</span></div>
+        <div class="scr-title">Telemetria<small>Linha 03 — controlador PID</small></div>
+
+        <div class="chart-card">
+          <div class="chart-head">
+            <div class="chart-val" id="liveVal">128,4<b>°C</b></div>
+            <span class="chart-tag">estável</span>
+          </div>
+          <svg viewBox="0 0 220 74" width="100%" height="74" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#7aa2f7" stop-opacity=".30"/>
+                <stop offset="100%" stop-color="#7aa2f7" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path id="area" fill="url(#fill)" d=""></path>
+            <path id="line" fill="none" stroke="#7aa2f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d=""></path>
+            <circle id="head" r="3" fill="#d0e0ff"></circle>
+          </svg>
+        </div>
+
+        <div class="metrics">
+          <div class="metric"><span>Setpoint</span><strong>130 °C</strong></div>
+          <div class="metric"><span>Desvio</span><strong>1,6 %</strong></div>
+        </div>
+
+        <div class="rows">
+          <div class="row"><i></i><p><b>Ciclo concluído</b><em>há 2 min · sem alarmes</em></p></div>
+          <div class="row warn"><i></i><p><b>Pressão acima da média</b><em>há 14 min · monitorando</em></p></div>
+          <div class="row"><i></i><p><b>Sincronizado com InfluxDB</b><em>há 21 min</em></p></div>
+        </div>
+
+        <div class="tabbar"><div></div><div></div><div></div><div></div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="wrap" style="padding-top:0">
+  <div class="stats rise">
+    <div class="stat"><strong>3</strong><span>apps Flutter publicados na App Store e Google Play</span></div>
+    <div class="stat"><strong>1</strong><span>software registrado no INPI como coautor</span></div>
+    <div class="stat"><strong>100%</strong><span>da arquitetura mobile sob minha responsabilidade</span></div>
+  </div>
+</section>
+
+<section class="wrap" id="sobre">
+  <div class="about">
+    <div class="rise">
+      <div class="eyebrow">Como eu trabalho</div>
+      <h2>Único desenvolvedor, decisão inteira.</h2>
+      <p class="lead">Na Comber, não existe alguém acima para revisar a arquitetura. Isso me obrigou a aprender a justificar cada escolha: por que MVVM aqui, por que MQTT ali, por que este dado não pode sair do banco sem política de acesso. Levo esse mesmo cuidado para código que vai rodar no celular de outra pessoa.</p>
+    </div>
+    <div class="about-list rise">
+      <div class="about-item">
+        <h3>Arquitetura antes do primeiro widget</h3>
+        <p>Defino camadas, contratos e design system antes de sair codando tela. MVVM, separação cliente-servidor e estado previsível.</p>
+      </div>
+      <div class="about-item">
+        <h3>Teste como parte da entrega</h3>
+        <p>Testes unitários, de widget e de integração com Mockito e Flutter Test, seguindo o padrão AAA.</p>
+      </div>
+      <div class="about-item">
+        <h3>Publicação é responsabilidade minha</h3>
+        <p>Submissão nas duas lojas, ambientes de staging e produção em VPS, e suporte ao app depois que ele está na mão do usuário.</p>
+      </div>
+      <div class="about-item">
+        <h3>Segurança não é etapa final</h3>
+        <p>UFW, Fail2Ban, NGINX, CORS e chaves de acesso configurados para reduzir superfície de ataque na infraestrutura que serve os apps.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="projetos">
+  <div class="rise" style="margin-bottom:38px">
+    <div class="eyebrow">Projetos</div>
+    <h2>O que eu construí e coloquei no ar.</h2>
+  </div>
+
+  <div class="projects">
+    <article class="glass card feature rise">
+      <div class="device-mini-wrap" aria-hidden="true">
+        <div class="device sm">
+          <div class="screen">
+            <div class="scr-top"><span>22:56</span><span>CERBERUS</span></div>
+            <div class="scr-title" style="display:flex;align-items:center;gap:8px;font-size:15px">
+              <span class="brand-dot"></span>Próximos eventos
+            </div>
+            <div class="ticket-art"><span class="ticket-date">31/10</span></div>
+            <div class="ticket-info">
+              <span class="tag">CERBERUS</span>
+              <strong>Open Hell</strong>
+              <small>Zouk · Local</small>
+            </div>
+            <div class="ticket-price"><span>A partir de</span><strong>R$ 40,00</strong></div>
+            <div class="tabbar"><div></div><div></div><div></div><div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <h3>Atléticas</h3>
+            <div class="role">Flutter · Node.js · Firebase · iOS e Android</div>
+          </div>
+          <span class="badge live">Em produção</span>
+        </div>
+        <p class="desc" style="margin-top:14px">Marketplace privado de ingressos para festas universitárias, publicado nas duas lojas. Fiz o produto inteiro: frontend em Flutter e backend em Firebase Cloud Functions com Node.js.</p>
+        <div class="card-links">
+          <a href="https://apps.apple.com/app/atl%C3%A9ticas/id6785540429" target="_blank" rel="noopener">App Store</a>
+          <a href="https://play.google.com/store/apps/details?id=com.atleticas.app" target="_blank" rel="noopener">Google Play</a>
+        </div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <ul class="highlights">
+          <li>Split payments com Mercado Pago.</li>
+          <li>Programação concorrente para processar pedidos em paralelo sem travar a fila de compra.</li>
+          <li>Experiência personalizada por atlética, com identidade própria para cada usuário.</li>
+        </ul>
+        <div class="chips" style="margin-top:20px">
+          <span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Cloud Functions</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="glass card rise" style="grid-column:1/-1">
+      <div class="card-top">
+        <div>
+          <h3>Telemetria industrial</h3>
+          <div class="role">Comber Indústria · Flutter · IoT</div>
+        </div>
+        <span class="badge live">Em produção</span>
+      </div>
+      <p class="desc">Solução completa de monitoramento de telemetria industrial em tempo real. Defini a arquitetura, o design system e os requisitos funcionais e não funcionais, integrando o app a máquinas via MQTT, Node-RED e InfluxDB.</p>
+      <p class="desc">Também desenvolvi uma solução de IA em Python para otimização de controladores PID, registrada no INPI como coautor do software ISA — Inteligência Sistêmica de Automação Comber.</p>
+      <div class="chips">
+        <span class="chip">Flutter</span><span class="chip">MQTT</span><span class="chip">Node-RED</span>
+        <span class="chip">InfluxDB</span><span class="chip">Python</span><span class="chip">VPS</span>
+      </div>
+    </article>
+
+    <article class="glass card feature rise" style="grid-column:1/-1;flex-direction:row-reverse">
+      <div class="device-mini-wrap" aria-hidden="true">
+        <div class="device sm">
+          <div class="screen">
+            <div class="scr-top"><span>08:35</span><span>Beta</span></div>
+            <div class="mux-logo"><span>MUX</span></div>
+            <div class="mux-title"><strong style="font-size:15px;font-weight:600">Bem-vindo de volta</strong><small>Faça login para continuar</small></div>
+            <div class="field"><span class="field-label">Email</span><div class="field-box">voce@email.com</div></div>
+            <div class="field"><span class="field-label">Senha</span><div class="field-box">••••••••••</div></div>
+            <div class="btn-row"><div class="mini-btn azure" style="flex:1">Entrar</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <h3>Mux-Metrics</h3>
+            <div class="role">Flutter · MVVM · Firebase</div>
+          </div>
+          <span class="badge">Teste fechado</span>
+        </div>
+        <p class="desc" style="margin-top:14px">Plataforma de pesquisa longitudinal de experiência do usuário, desenvolvida como TCC. Implementa três instrumentos científicos validados — AttrakDiff, UEQ e NASA-TLX — com controle de expiração de estudos via Cloud Functions e notificações push com OneSignal.</p>
+        <div class="chips">
+          <span class="chip">Flutter</span><span class="chip">MVVM</span><span class="chip">Firebase Auth</span>
+          <span class="chip">Firestore</span><span class="chip">OneSignal</span><span class="chip">Mockito</span>
+        </div>
+        <div class="card-links">
+          <a href="https://github.com/Luislc1/tcc" target="_blank" rel="noopener">Repositório</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="glass card feature rise" style="grid-column:1/-1">
+      <div class="device-mini-wrap" aria-hidden="true">
+        <div class="device sm">
+          <div class="screen">
+            <div class="scr-top"><span>08:27</span><span>LinkURL</span></div>
+            <div class="scr-title" style="font-size:15px">Gerar link<small style="font-weight:400;color:var(--dim);font-size:11.5px;margin-top:3px;display:block">Mensagem pronta pro WhatsApp</small></div>
+            <div class="field"><span class="field-label">Número</span><div class="field-box">(64) 99090-9090</div></div>
+            <div class="field"><span class="field-label">Mensagem</span><div class="field-box tall">Olá! Vim pelo link da bio ✨</div></div>
+            <div class="btn-row"><div class="mini-btn mint">Gerar link</div><div class="mini-btn">QR Code</div></div>
+            <div class="toast-mini"><i></i><p><b>Link copiado</b><em>pronto para compartilhar</em></p></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <h3>LinkUrl</h3>
+            <div class="role">Flutter · Provider · Open source</div>
+          </div>
+          <span class="badge live">Na App Store</span>
+        </div>
+        <p class="desc" style="margin-top:14px">Elimina o trabalho manual de formatar links do WhatsApp: gera links com mensagem pré-formatada e QR Code para compartilhar. Arquitetura MVVM com Provider para gerenciamento de estado.</p>
+        <div class="chips">
+          <span class="chip">Flutter</span><span class="chip">Provider</span><span class="chip">QR Code</span><span class="chip">MVVM</span>
+        </div>
+        <div class="card-links">
+          <a href="https://apps.apple.com/br/app/linkurl/id6798435070" target="_blank" rel="noopener">App Store</a>
+          <a href="https://github.com/Luislc1/linkUrl" target="_blank" rel="noopener">Repositório</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="wrap" id="stack">
+  <div class="rise" style="margin-bottom:38px">
+    <div class="eyebrow">Ferramentas</div>
+    <h2>Stack que eu uso no dia a dia.</h2>
+  </div>
+  <div class="stack">
+    <div class="glass rise"><h3>Mobile</h3><ul>
+      <li>Flutter</li><li>Dart</li><li>iOS e Android</li><li>Publicação nas lojas</li><li>Design system próprio</li>
+    </ul></div>
+    <div class="glass rise"><h3>Backend e APIs</h3><ul>
+      <li>Node.js</li><li>Cloud Functions</li><li>REST APIs</li><li>Python</li><li>Node-RED</li>
+    </ul></div>
+    <div class="glass rise"><h3>Dados</h3><ul>
+      <li>Postgres</li><li>Firestore</li><li>SQLite</li><li>InfluxDB</li><li>Supabase</li>
+    </ul></div>
+    <div class="glass rise"><h3>Qualidade e infra</h3><ul>
+      <li>Mockito · Flutter Test</li><li>Widget e integração</li><li>MVVM · camadas · MVC</li><li>NGINX · UFW · Fail2Ban</li><li>Staging e produção em VPS</li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="wrap" id="trajetoria">
+  <div class="rise" style="margin-bottom:34px">
+    <div class="eyebrow">Trajetória</div>
+    <h2>Onde eu estive.</h2>
+  </div>
+  <div class="track rise">
+    <div class="track-item">
+      <div class="track-when">08/2025 — hoje</div>
+      <div>
+        <h3>Desenvolvedor Mobile (Flutter) — Comber Indústria</h3>
+        <p>Rio Verde, GO. Arquitetura, design system e requisitos do app de telemetria industrial; testes com Mockito e Flutter Test; segurança e deploy em VPS; suporte ao aplicativo em produção.</p>
+      </div>
+    </div>
+    <div class="track-item">
+      <div class="track-when">Concluído</div>
+      <div>
+        <h3>Bacharelado em Engenharia de Software — UniRV</h3>
+        <p>Rio Verde, GO. TCC em pesquisa longitudinal de experiência do usuário, que virou o Mux-Metrics.</p>
+      </div>
+    </div>
+    <div class="track-item">
+      <div class="track-when">Registro</div>
+      <div>
+        <h3>Coautor do software ISA — INPI</h3>
+        <p>Inteligência Sistêmica de Automação Comber, processo nº 512026000543-4: otimização de controladores PID em máquinas industriais com IA.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="contato">
+  <div class="glass contact rise">
+    <h2>Vamos conversar.</h2>
+    <p class="lead">Estou aberto a vagas de desenvolvedor Flutter. Respondo rápido por e-mail e no LinkedIn.</p>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="mailto:luiscqueiroz4@gmail.com">luiscqueiroz4@gmail.com</a>
+      <a class="btn btn-ghost" href="https://linkedin.com/in/luis-carlosqs1" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://github.com/Luislc1" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn btn-ghost" href="tel:+5564984274381">+55 64 98427-4381</a>
+    </div>
+  </div>
+
+  <footer>
+    <span>Luis Carlos de Queiroz Silva — Rio Verde, GO</span>
+    <span>Engenheiro de Software · Flutter, Dart, Node.js</span>
+  </footer>
+</section>
+</main>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* revelações no scroll */
+  var items = document.querySelectorAll('.rise');
+  if(reduce || !('IntersectionObserver' in window)){
+    items.forEach(function(el){ el.classList.add('seen'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
+      });
+    }, {threshold:.12, rootMargin:'0px 0px -60px 0px'});
+    items.forEach(function(el){ io.observe(el); });
+  }
+
+  /* luz que segue o ponteiro + brilho local nos cartões de vidro */
+  if(!reduce && window.matchMedia('(pointer:fine)').matches){
+    var light = document.querySelector('.cursor-light'), raf = null, lx = 0, ly = 0;
+    window.addEventListener('pointermove', function(ev){
+      lx = ev.clientX; ly = ev.clientY;
+      if(raf) return;
+      raf = requestAnimationFrame(function(){
+        light.style.setProperty('--px', lx + 'px');
+        light.style.setProperty('--py', ly + 'px');
+        raf = null;
+      });
+    }, {passive:true});
+
+    document.querySelectorAll('.glass').forEach(function(card){
+      card.addEventListener('pointermove', function(ev){
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (ev.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (ev.clientY - r.top) + 'px');
+      }, {passive:true});
+    });
+  }
+
+  /* gráfico vivo dentro do aparelho */
+  var line = document.getElementById('line'),
+      area = document.getElementById('area'),
+      head = document.getElementById('head'),
+      val  = document.getElementById('liveVal');
+  if(line){
+    var N = 34, W = 220, H = 74, data = [], t = 0;
+    for(var i=0;i<N;i++) data.push(0.5);
+
+    function point(i,v){ return [ (i/(N-1))*W, H - 6 - v*(H-16) ]; }
+    function draw(){
+      var d = '', a = '';
+      for(var i=0;i<N;i++){
+        var p = point(i, data[i]);
+        d += (i ? ' L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1);
+      }
+      a = d + ' L' + W + ' ' + H + ' L0 ' + H + ' Z';
+      line.setAttribute('d', d);
+      area.setAttribute('d', a);
+      var last = point(N-1, data[N-1]);
+      head.setAttribute('cx', last[0].toFixed(1));
+      head.setAttribute('cy', last[1].toFixed(1));
+    }
+
+    function step(){
+      t += 0.16;
+      var v = 0.52 + Math.sin(t)*0.16 + Math.sin(t*2.3)*0.07 + (Math.random()-0.5)*0.05;
+      v = Math.max(0.08, Math.min(0.94, v));
+      data.push(v); data.shift();
+      draw();
+      if(val) val.innerHTML = (120 + v*16).toFixed(1).replace('.', ',') + '<b>°C</b>';
+    }
+
+    if(reduce){
+      for(var j=0;j<N;j++) data[j] = 0.5 + Math.sin(j/4)*0.18;
+      draw();
+    } else {
+      for(var k=0;k<N;k++){ t += 0.16; data[k] = 0.52 + Math.sin(t)*0.16; }
+      draw();
+      setInterval(step, 240);
+    }
+  }
+})();
+</script>
+</body>
+</html>
