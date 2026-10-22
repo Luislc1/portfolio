@@ -74,6 +74,28 @@
     show(0);
   }
 
+  /* tema claro/escuro */
+  var root = document.documentElement, themeBtn = document.querySelector('.theme-switch');
+  var themeMeta = document.querySelector('meta[name="theme-color"]');
+  function applyTheme(t, animate){
+    if(animate){
+      root.classList.add('theme-anim');
+      clearTimeout(applyTheme.t);
+      applyTheme.t = setTimeout(function(){ root.classList.remove('theme-anim'); }, 500);
+    }
+    root.setAttribute('data-theme', t);
+    themeBtn.setAttribute('aria-checked', t === 'dark' ? 'true' : 'false');
+    themeMeta.setAttribute('content', t === 'dark' ? '#0d1015' : '#ffffff');
+  }
+  if(themeBtn){
+    applyTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light', false);
+    themeBtn.addEventListener('click', function(){
+      var t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(t, !reduce);
+      try{ localStorage.setItem('tema', t); }catch(e){}
+    });
+  }
+
   /* topo: sombra ao rolar e barra de progresso; trajetória preenchendo com a rolagem */
   var topbar = document.querySelector('.topbar'), progress = document.querySelector('.progress'), ticking = false;
   var track = document.querySelector('.track'), marks = track ? [].slice.call(track.children) : [];
