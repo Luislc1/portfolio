@@ -3,702 +3,529 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Luis Carlos — Desenvolvedor Flutter</title>
-<meta name="description" content="Luis Carlos de Queiroz Silva — Engenheiro de Software especializado em Flutter. 3 apps em produção, telemetria industrial em tempo real e arquitetura ponta a ponta.">
+<title>Luis Carlos, desenvolvedor Flutter</title>
+<meta name="description" content="Luis Carlos de Queiroz Silva, engenheiro de software e desenvolvedor Flutter em Rio Verde (GO). Apps publicados na App Store e no Google Play e telemetria industrial em tempo real.">
+<meta name="theme-color" content="#ffffff">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  /* Base preta profunda */
-  --ink:#000000;
-  --ink-2:#070709;
-  --ink-3:#0d0d11;
-  
-  /* Vidro e bordas */
-  --glass:rgba(255,255,255,.035);
-  --glass-2:rgba(255,255,255,.018);
-  --stroke:rgba(255,255,255,.08);
-  --stroke-soft:rgba(255,255,255,.04);
-  
-  /* Texto: branco para destaque, cinzas para o resto */
-  --text:#f0f0f5;
-  --text-strong:#ffffff;
-  --muted:#9a9aa5;
-  --dim:#5c5c68;
-  --dim-2:#3a3a42;
-  
-  /* Acentos coloridos pontuais */
-  --accent:#7aa2f7;        /* azul suave */
-  --accent-deep:#3d5a9e;
-  --accent-glow:rgba(122,162,247,.20);
-  
-  --mint:#4fd1a5;          /* verde suave para status */
-  --coral:#f7768e;         /* coral para alertas */
-  --gold:#e0af68;          /* dourado para badges */
-  
-  /* Glows */
-  --glow-a:rgba(122,162,247,.18);
-  --glow-b:rgba(187,154,247,.10);
-  --glow-c:rgba(79,209,165,.08);
-  
-  --radius:20px;
-  --maxw:1120px;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;background:var(--ink);color:var(--text);
-  font-family:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
-  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
-h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.025em;line-height:1.08}
-p{margin:0}
-a{color:inherit;text-decoration:none}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
-
-/* ---------- ambiente: luzes, grão, brilho do cursor ---------- */
-.ambient{position:fixed;inset:0;pointer-events:none;z-index:0}
-.orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.45}
-.orb-1{width:640px;height:640px;top:-260px;left:-160px;background:radial-gradient(circle,var(--glow-a),transparent 68%)}
-.orb-2{width:560px;height:560px;top:22%;right:-220px;background:radial-gradient(circle,var(--glow-b),transparent 70%)}
-.orb-3{width:700px;height:700px;bottom:-320px;left:35%;background:radial-gradient(circle,var(--glow-c),transparent 70%)}
-.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.35;mix-blend-mode:overlay;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
-.cursor-light{position:fixed;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(420px circle at var(--px,50%) var(--py,-20%),rgba(122,162,247,.07),transparent 62%);
-  transition:opacity .4s ease}
-main,header,footer{position:relative;z-index:2}
-
-/* ---------- nav ---------- */
-.nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:50;
-  display:flex;align-items:center;gap:6px;padding:7px 8px 7px 18px;
-  border:1px solid var(--stroke);border-radius:100px;
-  background:rgba(5,5,8,.75);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
-  box-shadow:0 12px 40px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.05);
-  opacity:0;animation:navIn .9s cubic-bezier(.2,.7,.2,1) .9s forwards}
-@keyframes navIn{from{opacity:0;transform:translateX(-50%) translateY(-14px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-.nav-mark{font-size:14px;font-weight:600;letter-spacing:-.01em;margin-right:10px;white-space:nowrap;color:var(--text-strong)}
-.nav-mark span{color:var(--dim);font-weight:400}
-.nav a.link{padding:8px 13px;border-radius:100px;font-size:14px;color:var(--muted);transition:color .25s,background .25s}
-.nav a.link:hover{color:var(--text-strong);background:rgba(255,255,255,.05)}
-.nav .cta{padding:8px 15px;border-radius:100px;font-size:14px;font-weight:500;color:#0a0a0f;
-  background:linear-gradient(180deg,#e8e8f0,#b0b0c0);box-shadow:0 6px 18px rgba(0,0,0,.4)}
-.nav .cta:hover{filter:brightness(1.1)}
-@media(max-width:760px){.nav a.link{display:none}.nav{padding:7px 8px 7px 16px}}
-
-/* ---------- layout ---------- */
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
-section{padding:120px 0}
-@media(max-width:760px){section{padding:84px 0}.wrap{padding:0 20px}}
-.eyebrow{font-size:13px;color:var(--dim);margin-bottom:18px;display:flex;align-items:center;gap:10px}
-.eyebrow::before{content:"";width:22px;height:1px;background:linear-gradient(90deg,var(--accent),transparent)}
-h2{font-size:clamp(28px,4vw,42px);margin-bottom:16px;color:var(--text-strong)}
-.lead{color:var(--muted);max-width:60ch}
-
-/* ---------- glass ---------- */
-.glass{
-  position:relative;border:1px solid var(--stroke);border-radius:var(--radius);
-  background:linear-gradient(160deg,var(--glass),var(--glass-2));
-  backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
-  box-shadow:0 24px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.05);
-  overflow:hidden;
-}
-.glass::after{
-  content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .45s ease;
-  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.06),transparent 60%)}
-.glass:hover::after{opacity:1}
-
-/* ---------- hero ---------- */
-.hero{padding-top:170px;padding-bottom:110px;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
-@media(max-width:940px){.hero{grid-template-columns:1fr;gap:56px;padding-top:140px}}
-.hero h1{font-size:clamp(38px,6.2vw,66px);letter-spacing:-.04em;color:var(--text-strong)}
-.hero h1 em{font-style:normal;color:var(--muted)}
-.hero .sub{margin-top:24px;color:var(--muted);font-size:clamp(16px,1.6vw,19px);max-width:52ch}
-.status{display:inline-flex;align-items:center;gap:9px;font-size:13.5px;color:var(--muted);
-  border:1px solid var(--stroke);border-radius:100px;padding:6px 14px 6px 11px;margin-bottom:28px;
-  background:rgba(255,255,255,.025);backdrop-filter:blur(10px)}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 0 rgba(79,209,165,.5);animation:pulse 2.6s infinite}
-@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(79,209,165,0)}100%{box-shadow:0 0 0 0 rgba(79,209,165,0)}}
-.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:38px}
-.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:100px;font-size:15px;font-weight:500;
-  border:1px solid var(--stroke);transition:transform .3s cubic-bezier(.2,.7,.2,1),background .3s,border-color .3s}
-.btn:hover{transform:translateY(-2px)}
-.btn-primary{color:#0a0a0f;background:linear-gradient(180deg,#f0f0f8,#c8c8d8);border-color:transparent;
-  box-shadow:0 10px 30px rgba(0,0,0,.45)}
-.btn-primary:hover{box-shadow:0 14px 38px rgba(0,0,0,.55)}
-.btn-ghost{color:var(--text);background:rgba(255,255,255,.03);backdrop-filter:blur(10px)}
-.btn-ghost:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
-.btn svg{width:16px;height:16px}
-
-/* ---------- device ---------- */
-.device-stage{display:flex;justify-content:center;perspective:1400px}
-.device{width:286px;height:582px;border-radius:44px;padding:11px;
-  border:1px solid rgba(255,255,255,.10);
-  background:linear-gradient(150deg,rgba(255,255,255,.10),rgba(255,255,255,.02) 40%,rgba(255,255,255,.05));
-  box-shadow:0 50px 100px rgba(0,0,0,.8),0 0 0 1px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.15);
-  transform:rotateY(-13deg) rotateX(4deg) translateZ(0);
-  animation:floaty 9s ease-in-out infinite;position:relative;overflow:hidden}
-@keyframes floaty{0%,100%{transform:rotateY(-13deg) rotateX(4deg) translateY(0)}50%{transform:rotateY(-11deg) rotateX(3deg) translateY(-14px)}}
-.device::before{
-  content:"";position:absolute;top:-40%;left:-60%;width:60%;height:190%;z-index:3;pointer-events:none;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.08),transparent);
-  transform:rotate(12deg);animation:sweep 7s ease-in-out infinite}
-@keyframes sweep{0%{left:-60%}55%,100%{left:130%}}
-.screen{width:100%;height:100%;border-radius:34px;background:linear-gradient(180deg,#08080c,#040406);
-  border:1px solid rgba(255,255,255,.05);padding:20px 18px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
-.scr-top{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--dim);font-family:"JetBrains Mono",monospace}
-.scr-title{font-size:17px;font-weight:600;letter-spacing:-.02em;color:var(--text-strong)}
-.scr-title small{display:block;font-size:11.5px;color:var(--dim);font-weight:400;letter-spacing:0;margin-top:3px}
-.chart-card{border:1px solid rgba(255,255,255,.06);border-radius:16px;background:rgba(255,255,255,.02);padding:12px 12px 6px}
-.chart-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
-.chart-val{font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--text-strong)}
-.chart-val b{font-size:12px;color:var(--dim);font-weight:400;margin-left:2px}
-.chart-tag{font-size:10.5px;color:var(--mint);border:1px solid rgba(79,209,165,.25);border-radius:6px;padding:2px 6px;background:rgba(79,209,165,.06)}
-.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.metric{border:1px solid rgba(255,255,255,.05);border-radius:14px;background:rgba(255,255,255,.02);padding:11px}
-.metric span{display:block;font-size:10.5px;color:var(--dim)}
-.metric strong{font-size:16px;font-weight:600;letter-spacing:-.02em;color:var(--text-strong)}
-.rows{display:flex;flex-direction:column;gap:8px;margin-top:2px}
-.row{display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.04);border-radius:13px;
-  background:rgba(255,255,255,.015);padding:10px 11px;opacity:0;animation:rowIn .7s cubic-bezier(.2,.7,.2,1) forwards}
-.row:nth-child(1){animation-delay:1.5s}.row:nth-child(2){animation-delay:1.68s}.row:nth-child(3){animation-delay:1.86s}
-@keyframes rowIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.row i{width:6px;height:26px;border-radius:4px;background:linear-gradient(180deg,var(--accent),var(--accent-deep));flex:none}
-.row.warn i{background:linear-gradient(180deg,var(--coral),#b04a5e)}
-.row p{font-size:12px;line-height:1.35}
-.row p b{display:block;font-weight:500;color:var(--text-strong)}
-.row p em{font-style:normal;color:var(--dim);font-size:10.5px}
-.tabbar{margin-top:auto;display:flex;justify-content:space-around;padding-top:12px;border-top:1px solid rgba(255,255,255,.04)}
-.tabbar div{width:20px;height:3px;border-radius:2px;background:rgba(255,255,255,.08)}
-.tabbar div:first-child{background:var(--accent)}
-
-/* ---------- mockups compactos ---------- */
-.device.sm{width:216px;height:440px;padding:8px;border-radius:34px;animation-duration:10.5s}
-.device.sm .screen{border-radius:26px;padding:16px 14px;gap:11px}
-.device-mini-wrap{flex:none;display:flex;justify-content:center}
-@keyframes sweepX{0%{transform:translateX(-140%) rotate(12deg)}55%,100%{transform:translateX(230%) rotate(12deg)}}
-
-.brand-dot{width:7px;height:7px;border-radius:50%;background:var(--coral);box-shadow:0 0 10px rgba(247,118,142,.6);flex:none}
-.ticket-art{position:relative;height:118px;border-radius:14px;overflow:hidden;
-  background:radial-gradient(120% 140% at 28% 18%,rgba(247,118,142,.15),transparent 62%),linear-gradient(160deg,#0c0c10,#060608);
-  border:1px solid rgba(247,118,142,.10)}
-.ticket-art::after{content:"";position:absolute;top:-30%;left:0;width:36%;height:170%;pointer-events:none;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.06),transparent);animation:sweepX 6.5s ease-in-out infinite}
-.ticket-date{position:absolute;top:10px;left:10px;font-size:10px;background:rgba(0,0,0,.7);padding:4px 8px;
-  border-radius:7px;border:1px solid rgba(255,255,255,.08);font-family:"JetBrains Mono",monospace;color:var(--muted)}
-.ticket-info{display:flex;flex-direction:column;gap:3px}
-.ticket-info .tag{font-size:10px;color:var(--coral);letter-spacing:.04em}
-.ticket-info strong{font-size:17px;font-weight:600;letter-spacing:-.01em;color:var(--text-strong)}
-.ticket-info small{color:var(--dim);font-size:12px}
-.ticket-price{display:flex;justify-content:space-between;align-items:center;
-  border-top:1px solid rgba(255,255,255,.04);padding-top:11px;margin-top:auto}
-.ticket-price span{font-size:11px;color:var(--dim)}
-.ticket-price strong{font-size:16px;font-weight:600;color:var(--text-strong)}
-
-.field{display:flex;flex-direction:column;gap:5px}
-.field-label{font-size:10.5px;color:var(--dim)}
-.field-box{border:1px solid rgba(255,255,255,.06);border-radius:11px;background:rgba(255,255,255,.02);
-  padding:9px 11px;font-size:12px;color:var(--muted)}
-.field-box.tall{height:50px;display:flex;align-items:flex-start}
-.btn-row{display:flex;gap:8px;margin-top:2px}
-.mini-btn{flex:1;text-align:center;font-size:12px;padding:9px 0;border-radius:10px;border:1px solid var(--stroke);color:var(--muted)}
-.mini-btn.mint{color:#061a13;background:linear-gradient(180deg,#a0e8cf,#3ab88a);border-color:transparent;font-weight:500}
-.mini-btn.azure{color:#0a0f1f;background:linear-gradient(180deg,#c8d8f8,#7a9de0);border-color:transparent;font-weight:500}
-.toast-mini{display:flex;align-items:center;gap:9px;border:1px solid rgba(79,209,165,.18);border-radius:12px;
-  background:rgba(79,209,165,.04);padding:9px 11px;margin-top:auto;opacity:0;animation:rowIn .7s cubic-bezier(.2,.7,.2,1) 1.7s forwards}
-.toast-mini i{width:6px;height:6px;border-radius:50%;background:var(--mint);flex:none;box-shadow:0 0 8px rgba(79,209,165,.5)}
-.toast-mini p{font-size:11.5px}
-.toast-mini p b{display:block;font-weight:500;color:var(--text-strong)}
-.toast-mini p em{font-style:normal;color:var(--dim);font-size:10px}
-
-.mux-logo{width:50px;height:50px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(circle,#5a7fd4,#1e3a6e);box-shadow:0 0 24px rgba(90,127,212,.4);animation:pulse 3s infinite}
-.mux-logo span{font-size:10.5px;font-weight:700;color:#fff;letter-spacing:.03em}
-.mux-title{text-align:center;margin-top:2px}
-.mux-title small{display:block;color:var(--dim);font-size:11.5px;font-weight:400;margin-top:3px}
-
-/* ---------- números ---------- */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--stroke-soft);border-bottom:1px solid var(--stroke-soft)}
-.stat{padding:30px 26px;border-left:1px solid var(--stroke-soft)}
-.stat:first-child{border-left:0;padding-left:0}
-.stat strong{display:block;font-size:34px;font-weight:600;letter-spacing:-.03em;color:var(--text-strong)}
-.stat span{font-size:14px;color:var(--muted)}
-@media(max-width:760px){.stats{grid-template-columns:1fr}.stat{border-left:0;border-top:1px solid var(--stroke-soft);padding:22px 0}.stat:first-child{border-top:0}}
-
-/* ---------- sobre ---------- */
-.about{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-@media(max-width:940px){.about{grid-template-columns:1fr;gap:34px}}
-.about-list{display:flex;flex-direction:column;gap:2px}
-.about-item{padding:20px 0;border-top:1px solid var(--stroke-soft)}
-.about-item h3{font-size:17px;font-weight:600;margin-bottom:6px;color:var(--text-strong)}
-.about-item p{color:var(--muted);font-size:15.5px}
-
-/* ---------- projetos ---------- */
-.projects{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:940px){.projects{grid-template-columns:1fr}}
-.card{padding:30px;display:flex;flex-direction:column;gap:14px;transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s}
-.card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.15)}
-.card.feature{grid-column:1/-1;flex-direction:row;gap:40px;align-items:flex-start}
-@media(max-width:940px){.card.feature{flex-direction:column!important;gap:16px}.device-mini-wrap{order:-1}}
-.card.feature .card-body{flex:1}
-.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
-.card h3{font-size:22px;color:var(--text-strong)}
-.card .role{font-size:13px;color:var(--dim);margin-top:5px;font-family:"JetBrains Mono",monospace}
-.card p.desc{color:var(--muted);font-size:15.5px}
-.badge{flex:none;font-size:11.5px;color:var(--accent);border:1px solid rgba(122,162,247,.22);
-  background:rgba(122,162,247,.06);border-radius:100px;padding:4px 11px;white-space:nowrap}
-.badge.live{color:var(--mint);border-color:rgba(79,209,165,.22);background:rgba(79,209,165,.06)}
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
-.chip{font-size:12.5px;color:var(--muted);border:1px solid var(--stroke-soft);border-radius:8px;padding:4px 9px;background:rgba(255,255,255,.02)}
-.card-links{display:flex;flex-wrap:wrap;gap:16px;margin-top:6px}
-.card-links a{font-size:14px;color:var(--accent);border-bottom:1px solid rgba(122,162,247,.25);padding-bottom:2px;transition:border-color .3s,color .3s}
-.card-links a:hover{color:#fff;border-color:#fff}
-.highlights{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px}
-.highlights li{position:relative;padding-left:18px;color:var(--muted);font-size:15px}
-.highlights li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:50%;
-  background:var(--accent);box-shadow:0 0 12px rgba(122,162,247,.5)}
-
-/* ---------- stack ---------- */
-.stack{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-@media(max-width:940px){.stack{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.stack{grid-template-columns:1fr}}
-.stack .glass{padding:24px}
-.stack h3{font-size:15px;margin-bottom:14px;color:var(--text-strong)}
-.stack ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
-.stack li{font-size:14.5px;color:var(--muted)}
-
-/* ---------- trilha ---------- */
-.track{display:flex;flex-direction:column}
-.track-item{display:grid;grid-template-columns:190px 1fr;gap:32px;padding:26px 0;border-top:1px solid var(--stroke-soft)}
-@media(max-width:760px){.track-item{grid-template-columns:1fr;gap:6px}}
-.track-when{font-size:14px;color:var(--dim);font-family:"JetBrains Mono",monospace}
-.track h3{font-size:19px;margin-bottom:6px;color:var(--text-strong)}
-.track p{color:var(--muted);font-size:15.5px}
-
-/* ---------- contato ---------- */
-.contact{padding:56px;text-align:center}
-.contact h2{margin-bottom:14px}
-.contact .lead{margin:0 auto}
-.contact-links{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:34px}
-footer{padding:44px 0 56px;border-top:1px solid var(--stroke-soft);margin-top:90px;
-  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--dim)}
-
-/* ---------- entradas ---------- */
-.rise{opacity:0;transform:translateY(22px);filter:blur(6px)}
-.rise.seen{opacity:1;transform:none;filter:none;
-  transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1),filter .9s}
-.hero .anim{opacity:0;animation:heroIn 1.1s cubic-bezier(.2,.7,.2,1) forwards}
-.hero .anim:nth-child(1){animation-delay:.15s}
-.hero .anim:nth-child(2){animation-delay:.27s}
-.hero .anim:nth-child(3){animation-delay:.39s}
-.hero .anim:nth-child(4){animation-delay:.51s}
-.device-stage{opacity:0;animation:heroIn 1.4s cubic-bezier(.2,.7,.2,1) .55s forwards}
-@keyframes heroIn{from{opacity:0;transform:translateY(26px);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
-
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-  .rise{opacity:1;transform:none;filter:none}
-  .hero .anim,.device-stage,.nav,.row{opacity:1}
-  html{scroll-behavior:auto}
-}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/telas.css">
 </head>
 <body>
 
-<div class="ambient" aria-hidden="true">
-  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
-</div>
-<div class="cursor-light" aria-hidden="true"></div>
-<div class="grain" aria-hidden="true"></div>
+<!-- ícones usados nas telas -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-status" viewBox="0 0 64 13">
+    <path d="M2 4.6a10 10 0 0 1 14 0M4.8 7.4a6 6 0 0 1 8.4 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+    <circle cx="9" cy="10.6" r="1.6"/>
+    <rect x="31" y="1" width="25" height="11" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/>
+    <rect x="33" y="3" width="21" height="7" rx="1.8"/>
+    <path d="M58 4.5v4a2 2 0 0 0 0-4z" opacity=".55"/>
+  </symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></symbol>
+  <symbol id="i-home-o" viewBox="0 0 24 24"><path d="M12 5.69l5 4.5V18h-2v-6H9v6H7v-7.81l5-4.5M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm7 6c-1.65 0-3-1.35-3-3V5h6v6c0 1.65-1.35 3-3 3zm7-6c0 1.3-.84 2.4-2 2.82V7h2v1z"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M22 10V6c0-1.11-.9-2-2-2H4c-1.1 0-1.99.89-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2s.9-2 2-2zm-2-1.46c-1.19.69-2 1.99-2 3.46s.81 2.77 2 3.46V18H4v-2.54c1.19-.69 2-1.99 2-3.46 0-1.48-.8-2.77-1.99-3.46L4 6h16v2.54zM11 15h2v2h-2zm0-4h2v2h-2zm0-4h2v2h-2z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 9c2.7 0 5.8 1.29 6 2v1H6v-.99c.2-.72 3.3-2.01 6-2.01M12 4C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></symbol>
+  <symbol id="i-call" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></symbol>
+  <symbol id="i-warehouse" viewBox="0 0 24 24"><path d="M22 21V7L12 3 2 7v14h5v-9h10v9h5zm-11-2H9v2h2v-2zm2-3h-2v2h2v-2zm2 3h-2v2h2v-2z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><path d="M9 13.75c-2.34 0-7 1.17-7 3.5V19h14v-1.75c0-2.33-4.66-3.5-7-3.5zM4.34 17c.84-.58 2.87-1.25 4.66-1.25s3.82.67 4.66 1.25H4.34zM9 12c1.93 0 3.5-1.57 3.5-3.5S10.93 5 9 5 5.5 6.57 5.5 8.5 7.07 12 9 12zm0-5c.83 0 1.5.67 1.5 1.5S9.83 10 9 10s-1.5-.67-1.5-1.5S8.17 7 9 7zm7.04 6.81c1.16.84 1.96 1.96 1.96 3.44V19h4v-1.75c0-2.02-3.5-3.17-5.96-3.44zM15 12c1.93 0 3.5-1.57 3.5-3.5S16.93 5 15 5c-.54 0-1.04.13-1.5.35.63.89 1 1.98 1 3.15s-.37 2.26-1 3.15c.46.22.96.35 1.5.35z"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><path d="M15.55 13c.75 0 1.41-.41 1.75-1.03l3.58-6.49A.996.996 0 0 0 20.01 4H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7l1.1-2h7.45zM6.16 6h12.15l-2.76 5H8.53L6.16 6zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 5.5 6.5 6.5L9 18.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></symbol>
+  <symbol id="i-leader" viewBox="0 0 24 24"><path d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z"/></symbol>
+  <symbol id="i-minus-c" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 12h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-plus-c" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 12h9M12 7.5v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM19 19h2v2h-2zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 13h2v2h-2zM19 15h2v2h-2z"/></symbol>
+  <symbol id="i-login" viewBox="0 0 24 24"><path d="M11 7 9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5-5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v14z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><path d="M16.59 7.58 10 14.17l-3.59-3.58L5 12l5 5 8-8zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M6.99 11 3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 5.99 19.53 19H4.47L12 5.99M12 2 1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></symbol>
+  <symbol id="i-sensors" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/><path d="M8.2 8.2a5.4 5.4 0 0 0 0 7.6M15.8 8.2a5.4 5.4 0 0 1 0 7.6M5.3 5.3a9.5 9.5 0 0 0 0 13.4M18.7 5.3a9.5 9.5 0 0 1 0 13.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-bars" viewBox="0 0 24 24"><path d="M5 10h3.2v10H5zM10.4 4h3.2v16h-3.2zM15.8 13H19v7h-3.2z"/></symbol>
+  <symbol id="i-flash" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12.8 6.5 8.5 13h3l-.8 4.5L15 11h-3z"/></symbol>
+  <symbol id="i-robot" viewBox="0 0 24 24"><path d="M4 21h9M6 21v-3h5v3M8.5 18l2.5-7 6.5-2.5M11 11 9.5 6.5l4-1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="1.6"/><path d="M17.5 8.5 20 6.5M17.5 8.5l2.8 1.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+</svg>
 
-<nav class="nav" aria-label="Navegação principal">
-  <span class="nav-mark">Luis Carlos <span>· Flutter</span></span>
-  <a class="link" href="#projetos">Projetos</a>
-  <a class="link" href="#stack">Stack</a>
-  <a class="link" href="#trajetoria">Trajetória</a>
-  <a class="cta" href="#contato">Contato</a>
-</nav>
+<div class="hero-grid" aria-hidden="true"></div>
 
-<main>
-<header class="wrap hero">
-  <div>
-    <div class="anim"><span class="status"><span class="dot"></span>Aberto a vagas de desenvolvedor Flutter</span></div>
-    <h1 class="anim">Apps Flutter em produção, <em>do design system ao deploy.</em></h1>
-    <p class="sub anim">Sou Luis Carlos, engenheiro de software em Rio Verde (GO). Publiquei 3 aplicações nas lojas da Apple e do Google e hoje sou o único desenvolvedor da Comber Indústria — defino a arquitetura, escrevo o app e sustento a infraestrutura que ele usa.</p>
-    <div class="actions anim">
-      <a class="btn btn-primary" href="#projetos">Ver projetos</a>
-      <a class="btn btn-ghost" href="mailto:luiscqueiroz4@gmail.com">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>
-        luiscqueiroz4@gmail.com
-      </a>
-    </div>
-  </div>
-
-  <div class="device-stage" aria-hidden="true">
-    <div class="device">
-      <div class="screen">
-        <div class="scr-top"><span>09:41</span><span>MQTT · online</span></div>
-        <div class="scr-title">Telemetria<small>Linha 03 — controlador PID</small></div>
-
-        <div class="chart-card">
-          <div class="chart-head">
-            <div class="chart-val" id="liveVal">128,4<b>°C</b></div>
-            <span class="chart-tag">estável</span>
-          </div>
-          <svg viewBox="0 0 220 74" width="100%" height="74" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#7aa2f7" stop-opacity=".30"/>
-                <stop offset="100%" stop-color="#7aa2f7" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <path id="area" fill="url(#fill)" d=""></path>
-            <path id="line" fill="none" stroke="#7aa2f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d=""></path>
-            <circle id="head" r="3" fill="#d0e0ff"></circle>
-          </svg>
-        </div>
-
-        <div class="metrics">
-          <div class="metric"><span>Setpoint</span><strong>130 °C</strong></div>
-          <div class="metric"><span>Desvio</span><strong>1,6 %</strong></div>
-        </div>
-
-        <div class="rows">
-          <div class="row"><i></i><p><b>Ciclo concluído</b><em>há 2 min · sem alarmes</em></p></div>
-          <div class="row warn"><i></i><p><b>Pressão acima da média</b><em>há 14 min · monitorando</em></p></div>
-          <div class="row"><i></i><p><b>Sincronizado com InfluxDB</b><em>há 21 min</em></p></div>
-        </div>
-
-        <div class="tabbar"><div></div><div></div><div></div><div></div></div>
-      </div>
-    </div>
-  </div>
+<div class="topbar">
+<header class="wrap top">
+  <a class="top-name" href="#inicio">Luis Carlos | Engenheiro de Software</a>
+  <nav aria-label="Navegação principal">
+    <a href="#projetos">Projetos</a>
+    <a href="#ferramentas">Ferramentas</a>
+    <a href="#trajetoria">Trajetória</a>
+    <a href="#contato">Contato</a>
+  </nav>
 </header>
+<i class="progress" aria-hidden="true"></i>
+</div>
 
-<section class="wrap" style="padding-top:0">
-  <div class="stats rise">
-    <div class="stat"><strong>3</strong><span>apps Flutter publicados na App Store e Google Play</span></div>
-    <div class="stat"><strong>1</strong><span>software registrado no INPI como coautor</span></div>
-    <div class="stat"><strong>100%</strong><span>da arquitetura mobile sob minha responsabilidade</span></div>
+<main id="inicio">
+<section class="wrap hero">
+  <div class="hero-text">
+  <h1>Faço apps Flutter e cuido deles depois que chegam na loja.</h1>
+  <p class="hero-intro">Tenho três apps publicados na App Store e no Google Play. O de ingressos para as atléticas já passa de 450 usuários. Hoje sou o único desenvolvedor da Comber Indústria: defino a arquitetura, escrevo o app de telemetria e mantenho o servidor que ele usa.</p>
+  <div class="hero-actions">
+    <a class="btn btn-dark" href="#projetos">Ver projetos</a>
+    <a class="btn" href="mailto:luiscqueiroz4@gmail.com">luiscqueiroz4@gmail.com</a>
+    <span class="hero-note">Procurando vaga como desenvolvedor Flutter.</span>
   </div>
-</section>
-
-<section class="wrap" id="sobre">
-  <div class="about">
-    <div class="rise">
-      <div class="eyebrow">Como eu trabalho</div>
-      <h2>Único desenvolvedor, decisão inteira.</h2>
-      <p class="lead">Na Comber, não existe alguém acima para revisar a arquitetura. Isso me obrigou a aprender a justificar cada escolha: por que MVVM aqui, por que MQTT ali, por que este dado não pode sair do banco sem política de acesso. Levo esse mesmo cuidado para código que vai rodar no celular de outra pessoa.</p>
-    </div>
-    <div class="about-list rise">
-      <div class="about-item">
-        <h3>Arquitetura antes do primeiro widget</h3>
-        <p>Defino camadas, contratos e design system antes de sair codando tela. MVVM, separação cliente-servidor e estado previsível.</p>
-      </div>
-      <div class="about-item">
-        <h3>Teste como parte da entrega</h3>
-        <p>Testes unitários, de widget e de integração com Mockito e Flutter Test, seguindo o padrão AAA.</p>
-      </div>
-      <div class="about-item">
-        <h3>Publicação é responsabilidade minha</h3>
-        <p>Submissão nas duas lojas, ambientes de staging e produção em VPS, e suporte ao app depois que ele está na mão do usuário.</p>
-      </div>
-      <div class="about-item">
-        <h3>Segurança não é etapa final</h3>
-        <p>UFW, Fail2Ban, NGINX, CORS e chaves de acesso configurados para reduzir superfície de ataque na infraestrutura que serve os apps.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="wrap" id="projetos">
-  <div class="rise" style="margin-bottom:38px">
-    <div class="eyebrow">Projetos</div>
-    <h2>O que eu construí e coloquei no ar.</h2>
   </div>
 
-  <div class="projects">
-    <article class="glass card feature rise">
-      <div class="device-mini-wrap" aria-hidden="true">
-        <div class="device sm">
-          <div class="screen">
-            <div class="scr-top"><span>22:56</span><span>CERBERUS</span></div>
-            <div class="scr-title" style="display:flex;align-items:center;gap:8px;font-size:15px">
-              <span class="brand-dot"></span>Próximos eventos
+  <div class="carousel" role="region" aria-roledescription="carrossel" aria-label="Apps que eu fiz">
+    <div class="carousel-stage">
+    <!-- Comber: tela inicial com leituras ao vivo -->
+    <figure class="slide is-front" style="--c:#1f3a6b" data-dur="8000" data-glow="#c9d8ef">
+      <div class="phone" style="--s:.62" data-app="comber-home" aria-hidden="true">
+        <div class="phone-screen"><div class="screen cb">
+          <div class="island"></div>
+          <div class="sb dark"><span>17:25</span><svg><use href="#i-status"/></svg></div>
+          <div class="cb-head"><img src="assets/img/comber-logo.jpg" alt=""></div>
+          <div class="cb-view"><div class="cb-scroll">
+            <div class="cb-device">
+              <span class="ic"><svg><use href="#i-robot"/></svg></span>
+              <div><b>LBI - Comber</b><small>Online · Monitorando</small></div>
+              <span class="swap"><svg><use href="#i-swap"/></svg>Trocar</span>
             </div>
-            <div class="ticket-art"><span class="ticket-date">31/10</span></div>
-            <div class="ticket-info">
-              <span class="tag">CERBERUS</span>
-              <strong>Open Hell</strong>
-              <small>Zouk · Local</small>
+
+            <div class="cb-label"><svg><use href="#i-sensors"/></svg>DADOS PRINCIPAIS</div>
+            <div class="cb-card">
+              <div class="cb-mode">
+                <p>MODO DE OPERAÇÃO: <b>AUTOMÁTICO</b></p>
+                <hr>
+                <div><span>SetPoint: <b>90°C</b></span><span>Secagem: <b>Secador</b></span></div>
+              </div>
+              <div class="cb-grid g2">
+                <div class="cb-tile"><span>Fornalha</span><b data-live data-base="28.1" data-amp=".35" data-dec="2" data-unit="°C">28.10°C</b></div>
+                <div class="cb-tile"><span>Pressão</span><b data-live data-base="0.01" data-amp=".012" data-dec="2" data-unit=" mmHg">0.00 mmHg</b></div>
+              </div>
+              <div class="cb-grid g3">
+                <div class="cb-tile"><span>Secador</span><b data-live data-base="34" data-amp="1.2" data-unit="°C">34°C</b></div>
+                <div class="cb-tile"><span>T2</span><b data-live data-base="38" data-amp="1.2" data-unit="°C">38°C</b></div>
+                <div class="cb-tile"><span>T3</span><b data-live data-base="30" data-amp="1.2" data-unit="°C">30°C</b></div>
+              </div>
             </div>
-            <div class="ticket-price"><span>A partir de</span><strong>R$ 40,00</strong></div>
-            <div class="tabbar"><div></div><div></div><div></div><div></div></div>
-          </div>
-        </div>
+
+            <div class="cb-label"><svg><use href="#i-flash"/></svg>INJETORES</div>
+            <div class="cb-card cb-inj"><span>INJ 1</span><span>INJ 2</span><span>INJ 3</span></div>
+
+            <div class="cb-label"><svg><use href="#i-warehouse"/></svg>PÁTIOS DE CAVACO</div>
+            <div class="cb-card cb-yards">
+              <div class="cb-yard">
+                <div class="donut"><svg viewBox="0 0 80 80"><circle class="trk" cx="40" cy="40" r="33"/><circle class="val" cx="40" cy="40" r="33" pathLength="100" style="--v:63"/></svg><div><b>63%</b><small>média</small></div></div>
+                <strong>Total</strong><span>1 pátio</span>
+              </div>
+              <i class="cb-vr"></i>
+              <div class="cb-yard">
+                <div class="donut"><svg viewBox="0 0 80 80"><circle class="trk" cx="40" cy="40" r="33"/><circle class="val" cx="40" cy="40" r="33" pathLength="100" style="--v:63"/></svg><div><b>63%</b><em>Bom</em></div></div>
+                <strong>Pátio 1</strong><span>63.0 m³</span><small>de 100.0 m³</small>
+              </div>
+            </div>
+
+            <div class="cb-label"><svg><use href="#i-bars"/></svg>CONSUMO ATUAL</div>
+            <div class="cb-card cb-use">
+              <div><span>Calor instantâneo</span><b data-live data-base=".03" data-amp=".03" data-dec="2" data-unit=" Gcal">0.00 Gcal</b></div>
+              <div><span>Calor médio</span><b>0.04 Gcal</b></div>
+              <div><span>Consumo Instantaneo</span><b data-live data-base=".03" data-amp=".03" data-dec="2" data-unit=" m³/h">0.00 m³/h</b></div>
+              <div><span>Consumo Médio</span><b>0.04 m³/h</b></div>
+            </div>
+
+            <div class="cb-label"><svg><use href="#i-warn"/></svg>ALERTAS E ALARMES</div>
+            <div class="cb-card cb-ok">
+              <span class="ic"><svg><use href="#i-ok"/></svg></span>
+              <div><small>STATUS DE ALERTAS</small><b>Operação Normal</b></div>
+              <em>NORMAL</em>
+            </div>
+          </div></div>
+          <nav class="cb-nav"><span class="on"><svg><use href="#i-home-o"/></svg></span><span><svg><use href="#i-call"/></svg></span><span><svg><use href="#i-warehouse"/></svg></span><span><svg><use href="#i-person"/></svg></span></nav>
+        </div></div>
       </div>
-      <div class="card-body">
-        <div class="card-top">
-          <div>
-            <h3>Atléticas</h3>
-            <div class="role">Flutter · Node.js · Firebase · iOS e Android</div>
-          </div>
-          <span class="badge live">Em produção</span>
-        </div>
-        <p class="desc" style="margin-top:14px">Marketplace privado de ingressos para festas universitárias, publicado nas duas lojas. Fiz o produto inteiro: frontend em Flutter e backend em Firebase Cloud Functions com Node.js.</p>
-        <div class="card-links">
-          <a href="https://apps.apple.com/app/atl%C3%A9ticas/id6785540429" target="_blank" rel="noopener">App Store</a>
-          <a href="https://play.google.com/store/apps/details?id=com.atleticas.app" target="_blank" rel="noopener">Google Play</a>
-        </div>
+      <figcaption><b>Comber Indústria</b><span>Leituras da máquina chegando em tempo real</span></figcaption>
+    </figure>
+
+    <!-- Atléticas: do evento ao pagamento -->
+    <figure class="slide is-next" style="--c:#b00000" data-dur="11500" data-glow="#f2c8c8">
+      <div class="phone" style="--s:.62;--bd:-2s" data-app="atl-flow" aria-hidden="true">
+        <div class="phone-screen"><div class="screen atl">
+          <div class="island"></div>
+          <div class="sb light"><span>19:15</span><svg><use href="#i-status"/></svg></div>
+
+          <section class="atl-page is-active" data-page="home">
+            <div class="atl-head"><img src="assets/img/cerberus.jpg" alt=""><b>CERBERUS</b><span><svg><use href="#i-leader"/></svg></span></div>
+            <p class="atl-title">Próximos eventos</p>
+            <div class="atl-event tapable" data-tap="event">
+              <img src="assets/img/open-hell-card.jpg" alt="">
+              <div class="atl-event-body">
+                <small>CERBERUS</small>
+                <strong>Open Hell</strong>
+                <p><svg><use href="#i-pin"/></svg>Zouk · Local</p>
+                <span>A partir de</span>
+                <b>R$ 50,00</b>
+              </div>
+            </div>
+            <nav class="atl-nav"><span class="on"><svg><use href="#i-home"/></svg></span><span><svg><use href="#i-trophy"/></svg></span><span><svg><use href="#i-ticket"/></svg></span><span><svg><use href="#i-user"/></svg></span></nav>
+          </section>
+
+          <section class="atl-page" data-page="event">
+            <div class="atl-poster"><img src="assets/img/open-hell.jpg" alt=""></div>
+            <span class="atl-round back"><svg><use href="#i-back"/></svg></span>
+            <span class="atl-round share"><svg><use href="#i-share"/></svg></span>
+            <div class="atl-detail">
+              <small>CERBERUS</small>
+              <p class="atl-name">Open Hell</p>
+              <div class="atl-info hi"><svg><use href="#i-cal"/></svg><div><span>Data e hora</span><b>31/10/2026 • 23:00</b></div></div>
+              <div class="atl-info"><svg><use href="#i-pin"/></svg><div><span>Local</span><b><u>Zouk</u></b></div></div>
+              <div class="atl-info"><svg><use href="#i-people"/></svg><div><span>Vagas disponíveis</span><b>10 de 118</b></div></div>
+              <p class="atl-about">Sobre o evento</p>
+              <p class="atl-desc">Uma festa de Halloween com muito funk, música, caos e, claro... OPEN GUMMY A</p>
+            </div>
+            <div class="atl-buy">
+              <div><span>Valor</span><b>R$ 50,00</b></div>
+              <span class="atl-cta tapable" data-tap="buy"><svg><use href="#i-cart"/></svg>Comprar ingresso</span>
+            </div>
+          </section>
+
+          <section class="atl-page" data-page="checkout">
+            <div class="atl-bar"><svg><use href="#i-back"/></svg><span>Checkout</span></div>
+            <div class="atl-co">
+              <p class="atl-h">Resumo do Pedido</p>
+              <div class="atl-box atl-sum"><img src="assets/img/open-hell-thumb.jpg" alt=""><div><b>Open Hell</b><span>31/10/2026 • 23:00</span></div></div>
+              <p class="atl-h">Informações do Ingresso</p>
+              <div class="atl-box atl-qty">
+                <div><b>Quantidade</b><span>Máx. 9 por compra</span></div>
+                <div class="atl-step"><i class="off" data-minus><svg><use href="#i-minus-c"/></svg></i><b data-qty>1</b><i class="tapable" data-tap="plus"><svg><use href="#i-plus-c"/></svg></i></div>
+              </div>
+              <div class="atl-row"><span>Lote</span><span>Lote 2</span></div>
+              <hr>
+              <div class="atl-input">Código da Atlética (Opcional)</div>
+              <hr>
+              <p class="atl-h">Forma de Pagamento</p>
+              <div class="atl-box atl-pay">
+                <div class="on"><i></i><p>PIX<span>Aprovação imediata (Menor taxa)</span></p></div>
+                <div><i></i><p>Cartão de Crédito<span>Até 12x • Parcelamento disponível</span></p></div>
+              </div>
+            </div>
+            <div class="atl-paybar"><span class="atl-cta wide tapable" data-tap="pix">Pagar via Pix</span></div>
+          </section>
+          <div class="home-ind"></div>
+        </div></div>
       </div>
-      <div style="flex:1;min-width:0">
-        <ul class="highlights">
-          <li>Split payments com Mercado Pago.</li>
-          <li>Programação concorrente para processar pedidos em paralelo sem travar a fila de compra.</li>
-          <li>Experiência personalizada por atlética, com identidade própria para cada usuário.</li>
-        </ul>
-        <div class="chips" style="margin-top:20px">
-          <span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Cloud Functions</span>
+      <figcaption><b>Atléticas</b><span>Do evento ao pagamento por Pix</span></figcaption>
+    </figure>
+
+    <!-- LinkURL: gerando um link -->
+    <figure class="slide is-prev" style="--c:#0b3449" data-dur="11000" data-glow="#c3dce4">
+      <div class="phone" style="--s:.62;--bd:-4s" data-app="linkurl" aria-hidden="true">
+        <div class="phone-screen"><div class="screen lu">
+          <div class="island"></div>
+          <div class="sb light"><span>17:08</span><svg><use href="#i-status"/></svg></div>
+          <div class="lu-head">LinkURL<svg><use href="#i-login"/></svg></div>
+          <div class="lu-body">
+            <p class="lu-label">Número de telefone</p>
+            <div class="lu-field" data-field="phone"><span class="hint">(64) 99090-9090</span><span class="val"></span><i class="caret"></i></div>
+            <p class="lu-label">Mensagem</p>
+            <div class="lu-field tall" data-field="msg"><span><span class="hint">Mensagem</span><span class="val"></span><i class="caret"></i></span></div>
+            <div class="lu-btns">
+              <span class="lu-btn tapable" data-tap="gen"><svg><use href="#i-copy"/></svg>Gerar Link</span>
+              <span class="lu-btn qr"><svg><use href="#i-qr"/></svg>QR Code</span>
+            </div>
+          </div>
+          <div class="lu-snack">Link copiado</div>
+          <div class="home-ind dark"></div>
+        </div></div>
+      </div>
+      <figcaption><b>LinkURL</b><span>Link do WhatsApp com a mensagem já escrita</span></figcaption>
+    </figure>
+    </div>
+    <div class="carousel-dots">
+      <button type="button" class="on" style="--c:#1f3a6b" aria-label="Comber Indústria" aria-current="true"></button>
+      <button type="button" style="--c:#b00000" aria-label="Atléticas"></button>
+      <button type="button" style="--c:#0b3449" aria-label="LinkURL"></button>
+    </div>
+    <p class="bench-note">Telas recriadas em HTML a partir dos apps publicados.</p>
+  </div>
+</section>
+
+<div class="band" aria-hidden="true">
+  <div class="band-row"><div class="band-track"><span>Flutter</span><i></i><span>Dart</span><i></i><span>Node.js</span><i></i><span>Firebase</span><i></i><span>MQTT</span><i></i><span>Node-RED</span><i></i><span>InfluxDB</span><i></i><span>Postgres</span><i></i><span>Python</span><i></i><span>Mercado Pago</span><i></i><span>NGINX</span><i></i><span>Mockito</span><i></i><span>Flutter</span><i></i><span>Dart</span><i></i><span>Node.js</span><i></i><span>Firebase</span><i></i><span>MQTT</span><i></i><span>Node-RED</span><i></i><span>InfluxDB</span><i></i><span>Postgres</span><i></i><span>Python</span><i></i><span>Mercado Pago</span><i></i><span>NGINX</span><i></i><span>Mockito</span><i></i></div></div>
+  <div class="band-row rev"><div class="band-track"><span>3 apps publicados</span><i></i><span>450 usuários</span><i></i><span>Telemetria em tempo real</span><i></i><span>Split de pagamentos</span><i></i><span>Registro no INPI</span><i></i><span>Deploy em VPS</span><i></i><span>iOS e Android</span><i></i><span>3 apps publicados</span><i></i><span>450 usuários</span><i></i><span>Telemetria em tempo real</span><i></i><span>Split de pagamentos</span><i></i><span>Registro no INPI</span><i></i><span>Deploy em VPS</span><i></i><span>iOS e Android</span><i></i></div></div>
+</div>
+
+<section class="wrap section" id="projetos">
+  <h2>Projetos</h2>
+
+  <article class="project">
+    <div class="project-text">
+      <h3>Telemetria industrial</h3>
+      <p class="project-sub">Comber Indústria, desde agosto de 2025</p>
+      <p>O app mostra em tempo real o que acontece nas máquinas da Comber: temperatura da fornalha e do secador, pressão, nível dos pátios de cavaco, consumo e alarmes. Pelo mesmo app o cliente pede cavaco e abre chamado para a equipe técnica.</p>
+      <p>Sou o único desenvolvedor do projeto. Defini a arquitetura, o design system e os requisitos, e liguei o app às máquinas usando MQTT, Node-RED e InfluxDB.</p>
+      <p>Também participei do ISA, uma solução em Python que usa IA para ajustar controladores PID. O software está registrado no INPI e eu sou um dos autores.</p>
+      <dl class="facts">
+        <dt>Situação</dt><dd>Em produção</dd>
+        <dt>Minha parte</dt><dd>Arquitetura, app, testes e servidor</dd>
+        <dt>Tecnologias</dt><dd>Flutter, MQTT, Node-RED, InfluxDB, Python, VPS</dd>
+        <dt>Registro</dt><dd>ISA, INPI nº 512026000543-4</dd>
+      </dl>
+    </div>
+
+    <div class="stage comber">
+      <figure>
+        <div class="phone" style="--s:.56" data-app="comber-alerts" aria-hidden="true">
+          <div class="phone-screen"><div class="screen cb">
+            <div class="island"></div>
+            <div class="sb light"><span>17:25</span><svg><use href="#i-status"/></svg></div>
+            <div class="cb-head"><img src="assets/img/comber-logo.jpg" alt=""></div>
+            <div class="cb-dim"></div>
+            <div class="cb-sheet">
+              <div class="cb-handle"></div>
+              <div class="cb-sheet-head"><b>Central de Alertas &amp; Falhas</b><svg><use href="#i-close"/></svg></div>
+              <span class="cb-dev">Dispositivo: a018dee5289b1c7d</span>
+              <div class="cb-seg"><span>Ao Vivo</span><span>Histórico</span><span class="on">Mais Frequentes</span></div>
+              <div class="cb-chips"><small>RANKING DE FALHAS:</small><span>30d</span><span>60d</span><span class="on"><svg><use href="#i-check"/></svg>90d</span><span>180d</span></div>
+
+              <div class="cb-fail" data-n="27" style="--w:100%">
+                <div><b>Alerta Maq Nivel Baixo</b><em><span data-count>27</span> vezes</em></div>
+                <p>Tag: alerta_maq_nivel_baixo · Tempo total inativo: 42m 25s</p>
+                <div class="cb-bar"><i></i></div>
+                <small>Última ocorrência: 15/10/2026 17:47</small>
+              </div>
+              <div class="cb-fail red" data-n="12" style="--w:44%">
+                <div><b>Temp Alta Secador T1</b><em><span data-count>12</span> vezes</em></div>
+                <p>Tag: temp_alta_secador_t1 · Tempo total inativo: 53m</p>
+                <div class="cb-bar"><i></i></div>
+                <small>Última ocorrência: 16/10/2026 15:34</small>
+              </div>
+              <div class="cb-fail" data-n="12" style="--w:44%">
+                <div><b>Alerta Temp Alta Secador T1</b><em><span data-count>12</span> vezes</em></div>
+                <p>Tag: alerta_temp_alta_secador_t1 · Tempo total inativo: 24m 10s</p>
+                <div class="cb-bar"><i></i></div>
+                <small>Última ocorrência: 16/10/2026 15:34</small>
+              </div>
+              <div class="cb-fail red" data-n="11" style="--w:41%">
+                <div><b>Temperatura Alta na Fornalha</b><em><span data-count>11</span> vezes</em></div>
+                <p>Tag: temp_alta_fornalha · Tempo total inativo: 22h 46m</p>
+                <div class="cb-bar"><i></i></div>
+                <small>Última ocorrência: 19/10/2026 10:18</small>
+              </div>
+              <div class="cb-fail red" data-n="11" style="--w:41%">
+                <div><b>Dsj Redler</b><em><span data-count>11</span> vezes</em></div>
+                <p>Tag: dsj_redler</p>
+                <div class="cb-bar"><i></i></div>
+              </div>
+            </div>
+          </div></div>
         </div>
+        <figcaption><b>Central de alertas</b><span>Falhas que mais se repetiram nos últimos 90 dias</span></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone" style="--s:.56;--bd:-3s" data-app="comber-services" aria-hidden="true">
+          <div class="phone-screen"><div class="screen cb">
+            <div class="island"></div>
+            <div class="sb dark"><span>17:26</span><svg><use href="#i-status"/></svg></div>
+            <div class="cb-head"><img src="assets/img/comber-logo.jpg" alt=""></div>
+            <div class="cb-svc">
+              <p class="cb-svc-title">Solicitar Serviços</p>
+              <div class="cb-hint"><svg><use href="#i-info"/></svg>Escolha o tipo de atendimento que deseja</div>
+              <div class="cb-tiles">
+                <span class="tapable" data-tap><img src="assets/img/comber-cavaco.jpg" alt=""></span>
+                <span class="tapable" data-tap><img src="assets/img/comber-maquina.jpg" alt=""></span>
+              </div>
+              <div class="cb-help tapable" data-tap>
+                <span class="ic" style="color:#f5c400"><svg><use href="#i-bolt"/></svg></span>
+                <div><b>Dúvida sobre a ELÉTRICA</b><p>Variáveis de entrada e saída, régua de borne, esquema elétrico e etc.</p></div>
+                <svg><use href="#i-chev"/></svg>
+              </div>
+              <div class="cb-help tapable" data-tap>
+                <span class="ic" style="color:#111"><svg><use href="#i-gear"/></svg></span>
+                <div><b>Dúvida sobre a MECÂNICA</b><p>Embuchamento de cavaco, desalinhamento, equipamento quebrado ou com mau funcionamento.</p></div>
+                <svg><use href="#i-chev"/></svg>
+              </div>
+            </div>
+            <nav class="cb-nav"><span><svg><use href="#i-home"/></svg></span><span class="on"><svg><use href="#i-call"/></svg></span><span><svg><use href="#i-warehouse"/></svg></span><span><svg><use href="#i-person"/></svg></span></nav>
+          </div></div>
+        </div>
+        <figcaption><b>Serviços</b><span>Pedido de cavaco e suporte elétrico ou mecânico</span></figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="project flip">
+    <div class="project-text">
+      <h3>Atléticas</h3>
+      <p class="project-sub">Ingressos para festas universitárias</p>
+      <p>Marketplace privado onde as atléticas publicam seus eventos e os alunos compram ingresso pelo celular, com Pix ou cartão. Cada atlética aparece com a própria identidade e disputa um ranking de membros com as outras.</p>
+      <p>Fiz o produto inteiro: o app em Flutter e o backend em Firebase Cloud Functions com Node.js.</p>
+      <dl class="facts">
+        <dt>Usuários</dt><dd><strong data-to="450">450</strong></dd>
+        <dt>Lojas</dt><dd>App Store e Google Play</dd>
+        <dt>Tecnologias</dt><dd>Flutter, Dart, Node.js, Cloud Functions, Mercado Pago</dd>
+      </dl>
+      <ul class="points">
+        <li>Split de pagamentos com Mercado Pago.</li>
+        <li>Pedidos processados em paralelo, para a fila de compra não travar quando um lote abre.</li>
+        <li>Visual próprio para cada atlética dentro do mesmo app.</li>
+      </ul>
+      <div class="links">
+        <a href="https://apps.apple.com/app/atl%C3%A9ticas/id6785540429" target="_blank" rel="noopener">App Store</a>
+        <a href="https://play.google.com/store/apps/details?id=com.atleticas.app" target="_blank" rel="noopener">Google Play</a>
+      </div>
+    </div>
+
+    <div class="stage atl">
+      <figure>
+        <div class="phone" style="--s:.56" data-app="atl-ranking" aria-hidden="true">
+          <div class="phone-screen"><div class="screen atl">
+            <div class="island"></div>
+            <div class="sb light"><span>19:15</span><svg><use href="#i-status"/></svg></div>
+            <div class="atl-bar"><svg><use href="#i-back"/></svg><span>Ranking das Atléticas</span></div>
+            <ol class="atl-ranking">
+              <li style="--i:0"><span class="atl-pos g1">1º</span><img src="assets/img/atl-1.jpg" alt=""><div><b>CERBERUS</b><span><span data-count="151">151</span> membros</span></div><svg><use href="#i-people"/></svg></li>
+              <li style="--i:1"><span class="atl-pos g2">2º</span><img src="assets/img/atl-2.jpg" alt=""><div><b>MANÍACA</b><span><span data-count="42">42</span> membros</span></div><svg><use href="#i-people"/></svg></li>
+              <li style="--i:2"><span class="atl-pos g3">3º</span><img src="assets/img/atl-3.jpg" alt=""><div><b>IMPOSTORA</b><span><span data-count="36">36</span> membros</span></div><svg><use href="#i-people"/></svg></li>
+              <li style="--i:3"><span class="atl-pos">4º</span><img src="assets/img/atl-4.jpg" alt=""><div><b>GRIFO</b><span><span data-count="26">26</span> membros</span></div><svg><use href="#i-people"/></svg></li>
+              <li style="--i:4"><span class="atl-pos">5º</span><img src="assets/img/atl-5.jpg" alt=""><div><b>ALCATEIA</b><span><span data-count="19">19</span> membros</span></div><svg><use href="#i-people"/></svg></li>
+              <li style="--i:5"><span class="atl-pos">6º</span><img src="assets/img/atl-6.jpg" alt=""><div><b>LAPÔNICA</b><span><span data-count="15">15</span> membros</span></div><svg><use href="#i-people"/></svg></li>
+              <li style="--i:6"><span class="atl-pos">7º</span><img src="assets/img/atl-7.jpg" alt=""><div><b>FAMERV</b><span><span data-count="13">13</span> membros</span></div><svg><use href="#i-people"/></svg></li>
+              <li style="--i:7"><span class="atl-pos">8º</span><img src="assets/img/atl-8.jpg" alt=""><div><b>SUPREMA</b><span><span data-count="4">4</span> membros</span></div><svg><use href="#i-people"/></svg></li>
+            </ol>
+            <div class="home-ind"></div>
+          </div></div>
+        </div>
+        <figcaption><b>Ranking das atléticas</b><span>Quem tem mais membros no app</span></figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <div class="minor">
+    <article>
+      <h3>LinkURL</h3>
+      <p class="project-sub">Na App Store, código aberto</p>
+      <p>Monta o link do WhatsApp com a mensagem já escrita e gera o QR Code dele, sem precisar formatar nada na mão. Feito em Flutter com MVVM e Provider para o estado.</p>
+      <dl class="facts">
+        <dt>Tecnologias</dt><dd>Flutter, Provider, QR Code, MVVM</dd>
+      </dl>
+      <div class="links">
+        <a href="https://apps.apple.com/br/app/linkurl/id6798435070" target="_blank" rel="noopener">App Store</a>
+        <a href="https://github.com/Luislc1/linkUrl" target="_blank" rel="noopener">Repositório</a>
       </div>
     </article>
-
-    <article class="glass card rise" style="grid-column:1/-1">
-      <div class="card-top">
-        <div>
-          <h3>Telemetria industrial</h3>
-          <div class="role">Comber Indústria · Flutter · IoT</div>
-        </div>
-        <span class="badge live">Em produção</span>
-      </div>
-      <p class="desc">Solução completa de monitoramento de telemetria industrial em tempo real. Defini a arquitetura, o design system e os requisitos funcionais e não funcionais, integrando o app a máquinas via MQTT, Node-RED e InfluxDB.</p>
-      <p class="desc">Também desenvolvi uma solução de IA em Python para otimização de controladores PID, registrada no INPI como coautor do software ISA — Inteligência Sistêmica de Automação Comber.</p>
-      <div class="chips">
-        <span class="chip">Flutter</span><span class="chip">MQTT</span><span class="chip">Node-RED</span>
-        <span class="chip">InfluxDB</span><span class="chip">Python</span><span class="chip">VPS</span>
-      </div>
-    </article>
-
-    <article class="glass card feature rise" style="grid-column:1/-1;flex-direction:row-reverse">
-      <div class="device-mini-wrap" aria-hidden="true">
-        <div class="device sm">
-          <div class="screen">
-            <div class="scr-top"><span>08:35</span><span>Beta</span></div>
-            <div class="mux-logo"><span>MUX</span></div>
-            <div class="mux-title"><strong style="font-size:15px;font-weight:600">Bem-vindo de volta</strong><small>Faça login para continuar</small></div>
-            <div class="field"><span class="field-label">Email</span><div class="field-box">voce@email.com</div></div>
-            <div class="field"><span class="field-label">Senha</span><div class="field-box">••••••••••</div></div>
-            <div class="btn-row"><div class="mini-btn azure" style="flex:1">Entrar</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-top">
-          <div>
-            <h3>Mux-Metrics</h3>
-            <div class="role">Flutter · MVVM · Firebase</div>
-          </div>
-          <span class="badge">Teste fechado</span>
-        </div>
-        <p class="desc" style="margin-top:14px">Plataforma de pesquisa longitudinal de experiência do usuário, desenvolvida como TCC. Implementa três instrumentos científicos validados — AttrakDiff, UEQ e NASA-TLX — com controle de expiração de estudos via Cloud Functions e notificações push com OneSignal.</p>
-        <div class="chips">
-          <span class="chip">Flutter</span><span class="chip">MVVM</span><span class="chip">Firebase Auth</span>
-          <span class="chip">Firestore</span><span class="chip">OneSignal</span><span class="chip">Mockito</span>
-        </div>
-        <div class="card-links">
-          <a href="https://github.com/Luislc1/tcc" target="_blank" rel="noopener">Repositório</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="glass card feature rise" style="grid-column:1/-1">
-      <div class="device-mini-wrap" aria-hidden="true">
-        <div class="device sm">
-          <div class="screen">
-            <div class="scr-top"><span>08:27</span><span>LinkURL</span></div>
-            <div class="scr-title" style="font-size:15px">Gerar link<small style="font-weight:400;color:var(--dim);font-size:11.5px;margin-top:3px;display:block">Mensagem pronta pro WhatsApp</small></div>
-            <div class="field"><span class="field-label">Número</span><div class="field-box">(64) 99090-9090</div></div>
-            <div class="field"><span class="field-label">Mensagem</span><div class="field-box tall">Olá! Vim pelo link da bio ✨</div></div>
-            <div class="btn-row"><div class="mini-btn mint">Gerar link</div><div class="mini-btn">QR Code</div></div>
-            <div class="toast-mini"><i></i><p><b>Link copiado</b><em>pronto para compartilhar</em></p></div>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-top">
-          <div>
-            <h3>LinkUrl</h3>
-            <div class="role">Flutter · Provider · Open source</div>
-          </div>
-          <span class="badge live">Na App Store</span>
-        </div>
-        <p class="desc" style="margin-top:14px">Elimina o trabalho manual de formatar links do WhatsApp: gera links com mensagem pré-formatada e QR Code para compartilhar. Arquitetura MVVM com Provider para gerenciamento de estado.</p>
-        <div class="chips">
-          <span class="chip">Flutter</span><span class="chip">Provider</span><span class="chip">QR Code</span><span class="chip">MVVM</span>
-        </div>
-        <div class="card-links">
-          <a href="https://apps.apple.com/br/app/linkurl/id6798435070" target="_blank" rel="noopener">App Store</a>
-          <a href="https://github.com/Luislc1/linkUrl" target="_blank" rel="noopener">Repositório</a>
-        </div>
+    <article>
+      <h3>Mux-Metrics</h3>
+      <p class="project-sub">TCC, em teste fechado</p>
+      <p>Plataforma para pesquisa longitudinal de experiência do usuário. Aplica três questionários validados (AttrakDiff, UEQ e NASA-TLX), encerra estudos vencidos com Cloud Functions e lembra os participantes por notificação com OneSignal.</p>
+      <dl class="facts">
+        <dt>Tecnologias</dt><dd>Flutter, MVVM, Firebase Auth, Firestore, OneSignal, Mockito</dd>
+      </dl>
+      <div class="links">
+        <a href="https://github.com/Luislc1/tcc" target="_blank" rel="noopener">Repositório</a>
       </div>
     </article>
   </div>
 </section>
 
-<section class="wrap" id="stack">
-  <div class="rise" style="margin-bottom:38px">
-    <div class="eyebrow">Ferramentas</div>
-    <h2>Stack que eu uso no dia a dia.</h2>
+<section class="wrap section tinted">
+  <div class="how-head">
+    <h2>Como eu trabalho</h2>
+    <p class="about-intro">Na Comber não tem ninguém acima de mim revisando a arquitetura. Por isso aprendi a justificar cada escolha: por que MVVM aqui, por que MQTT ali, por que esse dado não sai do banco sem política de acesso. Levo o mesmo cuidado para qualquer código que vai rodar no celular de outra pessoa.</p>
   </div>
+  <ol class="steps">
+    <li class="step" style="--i:0;--c:#1f3a6b">
+      <span class="step-n">1</span>
+      <h3>Arquitetura antes da primeira tela</h3>
+      <p>Defino camadas, contratos e design system antes de começar a codar. MVVM, separação entre cliente e servidor e estado previsível.</p>
+    </li>
+    <li class="step" style="--i:1;--c:#0b6a8a">
+      <span class="step-n">2</span>
+      <h3>Teste faz parte da entrega</h3>
+      <p>Testes unitários, de widget e de integração com Mockito e Flutter Test, no padrão AAA.</p>
+    </li>
+    <li class="step" style="--i:2;--c:#c8202f">
+      <span class="step-n">3</span>
+      <h3>Segurança desde o começo</h3>
+      <p>UFW, Fail2Ban, NGINX, CORS e chaves de acesso configurados para reduzir a superfície de ataque do servidor que atende os apps.</p>
+    </li>
+    <li class="step" style="--i:3;--c:#2e7d32">
+      <span class="step-n">4</span>
+      <h3>Eu publico e eu dou suporte</h3>
+      <p>Envio para as duas lojas, ambientes de staging e produção em VPS e suporte ao app depois que ele está na mão do usuário.</p>
+    </li>
+  </ol>
+</section>
+
+<section class="wrap section" id="ferramentas">
+  <h2>Ferramentas</h2>
   <div class="stack">
-    <div class="glass rise"><h3>Mobile</h3><ul>
-      <li>Flutter</li><li>Dart</li><li>iOS e Android</li><li>Publicação nas lojas</li><li>Design system próprio</li>
+    <div><h3>Mobile</h3><ul>
+      <li>Flutter e Dart</li><li>iOS e Android</li><li>Publicação nas lojas</li><li>Design system próprio</li>
     </ul></div>
-    <div class="glass rise"><h3>Backend e APIs</h3><ul>
-      <li>Node.js</li><li>Cloud Functions</li><li>REST APIs</li><li>Python</li><li>Node-RED</li>
+    <div><h3>Backend</h3><ul>
+      <li>Node.js</li><li>Cloud Functions</li><li>APIs REST</li><li>Python</li><li>Node-RED e MQTT</li>
     </ul></div>
-    <div class="glass rise"><h3>Dados</h3><ul>
+    <div><h3>Dados</h3><ul>
       <li>Postgres</li><li>Firestore</li><li>SQLite</li><li>InfluxDB</li><li>Supabase</li>
     </ul></div>
-    <div class="glass rise"><h3>Qualidade e infra</h3><ul>
-      <li>Mockito · Flutter Test</li><li>Widget e integração</li><li>MVVM · camadas · MVC</li><li>NGINX · UFW · Fail2Ban</li><li>Staging e produção em VPS</li>
+    <div><h3>Qualidade e infra</h3><ul>
+      <li>Mockito e Flutter Test</li><li>Testes de widget e integração</li><li>MVVM, MVC e camadas</li><li>NGINX, UFW e Fail2Ban</li><li>Staging e produção em VPS</li>
     </ul></div>
   </div>
 </section>
 
-<section class="wrap" id="trajetoria">
-  <div class="rise" style="margin-bottom:34px">
-    <div class="eyebrow">Trajetória</div>
-    <h2>Onde eu estive.</h2>
-  </div>
-  <div class="track rise">
-    <div class="track-item">
-      <div class="track-when">08/2025 — hoje</div>
-      <div>
-        <h3>Desenvolvedor Mobile (Flutter) — Comber Indústria</h3>
-        <p>Rio Verde, GO. Arquitetura, design system e requisitos do app de telemetria industrial; testes com Mockito e Flutter Test; segurança e deploy em VPS; suporte ao aplicativo em produção.</p>
+<section class="wrap section" id="trajetoria">
+  <h2>Trajetória</h2>
+  <ol class="track">
+    <li style="--c:#1f3a6b">
+      <div class="track-card">
+        <span class="when">Ago 2025 até hoje</span>
+        <h3>Desenvolvedor mobile (Flutter), Comber Indústria</h3>
+        <p>Rio Verde, GO. Arquitetura, design system e requisitos do app de telemetria industrial, testes com Mockito e Flutter Test, segurança e deploy em VPS, suporte ao app em produção.</p>
       </div>
-    </div>
-    <div class="track-item">
-      <div class="track-when">Concluído</div>
-      <div>
-        <h3>Bacharelado em Engenharia de Software — UniRV</h3>
-        <p>Rio Verde, GO. TCC em pesquisa longitudinal de experiência do usuário, que virou o Mux-Metrics.</p>
+    </li>
+    <li style="--c:#c8202f">
+      <div class="track-card">
+        <span class="when">Registro no INPI</span>
+        <h3>Coautor do software ISA</h3>
+        <p>Inteligência Sistêmica de Automação Comber, processo nº 512026000543-4. Otimiza controladores PID de máquinas industriais com IA.</p>
       </div>
-    </div>
-    <div class="track-item">
-      <div class="track-when">Registro</div>
-      <div>
-        <h3>Coautor do software ISA — INPI</h3>
-        <p>Inteligência Sistêmica de Automação Comber, processo nº 512026000543-4: otimização de controladores PID em máquinas industriais com IA.</p>
+    </li>
+    <li style="--c:#0b6a8a">
+      <div class="track-card">
+        <span class="when">Concluído</span>
+        <h3>Bacharelado em Engenharia de Software, UniRV</h3>
+        <p>Rio Verde, GO. TCC sobre pesquisa longitudinal de experiência do usuário, que virou o Mux-Metrics.</p>
       </div>
-    </div>
-  </div>
+    </li>
+  </ol>
 </section>
 
-<section class="wrap" id="contato">
-  <div class="glass contact rise">
-    <h2>Vamos conversar.</h2>
-    <p class="lead">Estou aberto a vagas de desenvolvedor Flutter. Respondo rápido por e-mail e no LinkedIn.</p>
-    <div class="contact-links">
-      <a class="btn btn-primary" href="mailto:luiscqueiroz4@gmail.com">luiscqueiroz4@gmail.com</a>
-      <a class="btn btn-ghost" href="https://linkedin.com/in/luis-carlosqs1" target="_blank" rel="noopener">LinkedIn</a>
-      <a class="btn btn-ghost" href="https://github.com/Luislc1" target="_blank" rel="noopener">GitHub</a>
-      <a class="btn btn-ghost" href="tel:+5564984274381">+55 64 98427-4381</a>
-    </div>
+<section class="wrap section contact" id="contato">
+  <div class="contact-panel">
+  <h2>Contato</h2>
+  <p class="section-lead">Procuro vaga como desenvolvedor Flutter. Respondo rápido por e-mail e pelo LinkedIn.</p>
+  <a class="contact-mail" href="mailto:luiscqueiroz4@gmail.com">luiscqueiroz4@gmail.com</a>
+  <div class="links">
+    <a href="https://linkedin.com/in/luis-carlosqs1" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/Luislc1" target="_blank" rel="noopener">GitHub</a>
+    <a href="tel:+5564984274381">+55 64 98427-4381</a>
   </div>
-
-  <footer>
-    <span>Luis Carlos de Queiroz Silva — Rio Verde, GO</span>
-    <span>Engenheiro de Software · Flutter, Dart, Node.js</span>
-  </footer>
+  </div>
 </section>
 </main>
 
-<script>
-(function(){
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* revelações no scroll */
-  var items = document.querySelectorAll('.rise');
-  if(reduce || !('IntersectionObserver' in window)){
-    items.forEach(function(el){ el.classList.add('seen'); });
-  } else {
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
-      });
-    }, {threshold:.12, rootMargin:'0px 0px -60px 0px'});
-    items.forEach(function(el){ io.observe(el); });
-  }
-
-  /* luz que segue o ponteiro + brilho local nos cartões de vidro */
-  if(!reduce && window.matchMedia('(pointer:fine)').matches){
-    var light = document.querySelector('.cursor-light'), raf = null, lx = 0, ly = 0;
-    window.addEventListener('pointermove', function(ev){
-      lx = ev.clientX; ly = ev.clientY;
-      if(raf) return;
-      raf = requestAnimationFrame(function(){
-        light.style.setProperty('--px', lx + 'px');
-        light.style.setProperty('--py', ly + 'px');
-        raf = null;
-      });
-    }, {passive:true});
-
-    document.querySelectorAll('.glass').forEach(function(card){
-      card.addEventListener('pointermove', function(ev){
-        var r = card.getBoundingClientRect();
-        card.style.setProperty('--mx', (ev.clientX - r.left) + 'px');
-        card.style.setProperty('--my', (ev.clientY - r.top) + 'px');
-      }, {passive:true});
-    });
-  }
-
-  /* gráfico vivo dentro do aparelho */
-  var line = document.getElementById('line'),
-      area = document.getElementById('area'),
-      head = document.getElementById('head'),
-      val  = document.getElementById('liveVal');
-  if(line){
-    var N = 34, W = 220, H = 74, data = [], t = 0;
-    for(var i=0;i<N;i++) data.push(0.5);
-
-    function point(i,v){ return [ (i/(N-1))*W, H - 6 - v*(H-16) ]; }
-    function draw(){
-      var d = '', a = '';
-      for(var i=0;i<N;i++){
-        var p = point(i, data[i]);
-        d += (i ? ' L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1);
-      }
-      a = d + ' L' + W + ' ' + H + ' L0 ' + H + ' Z';
-      line.setAttribute('d', d);
-      area.setAttribute('d', a);
-      var last = point(N-1, data[N-1]);
-      head.setAttribute('cx', last[0].toFixed(1));
-      head.setAttribute('cy', last[1].toFixed(1));
-    }
-
-    function step(){
-      t += 0.16;
-      var v = 0.52 + Math.sin(t)*0.16 + Math.sin(t*2.3)*0.07 + (Math.random()-0.5)*0.05;
-      v = Math.max(0.08, Math.min(0.94, v));
-      data.push(v); data.shift();
-      draw();
-      if(val) val.innerHTML = (120 + v*16).toFixed(1).replace('.', ',') + '<b>°C</b>';
-    }
-
-    if(reduce){
-      for(var j=0;j<N;j++) data[j] = 0.5 + Math.sin(j/4)*0.18;
-      draw();
-    } else {
-      for(var k=0;k<N;k++){ t += 0.16; data[k] = 0.52 + Math.sin(t)*0.16; }
-      draw();
-      setInterval(step, 240);
-    }
-  }
-})();
-</script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
