@@ -63,12 +63,12 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:84px}
+html{scroll-behavior:smooth;scroll-padding-top:84px;overflow-x:hidden;overflow-x:clip}
 body{
   margin:0;background:var(--bg);color:var(--ink);
   font-family:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
   font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
+  overflow-x:hidden;overflow-x:clip;
 }
 h1,h2,h3{margin:0;font-weight:640;line-height:1.05;font-variation-settings:var(--narrow)}
 p{margin:0}
@@ -109,7 +109,7 @@ html.theme-anim,html.theme-anim *:not(.screen *){transition:background-color .45
 .top nav a::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1.5px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
 .top nav a:hover{color:var(--ink)}
 .top nav a:hover::after{transform:scaleX(1);transform-origin:left}
-@media(max-width:640px){.top nav a:not(:last-child){display:none}.top-right{gap:16px}}
+@media(max-width:640px){.top nav a:not(:last-child){display:none}.top-right{gap:16px}.top-role{display:none}}
 
 /* ---------- abertura ---------- */
 .hero-grid{position:absolute;z-index:-1;top:0;left:0;right:0;height:1100px;pointer-events:none;
@@ -125,6 +125,7 @@ html.theme-anim,html.theme-anim *:not(.screen *){transition:background-color .45
 .btn-dark{color:var(--btn-fg);background:linear-gradient(var(--accent),var(--accent)) 0 0/0 100% no-repeat var(--btn-bg);border-color:var(--btn-bg);transition:background-size .45s var(--ease),border-color .3s,color .3s}
 .btn-dark:hover{background-size:100% 100%;border-color:var(--accent);color:#fff}
 .hero-note{font-size:15px;color:var(--muted)}
+@media(max-width:480px){.hero-actions .btn{flex:1 1 100%;justify-content:center}}
 
 /* carrossel com os apps rodando */
 .carousel{position:relative;isolation:isolate;padding-top:12px}
@@ -276,6 +277,14 @@ figcaption span{display:block;font-size:14px;color:var(--muted);line-height:1.45
   .step::after{display:none}
   .step-n{top:0;left:0}
   .motion .step::before{transform:scaleY(0)}
+  /* no celular a lista é longa: cada passo anima quando chega na tela */
+  .motion .step::before{transition-delay:.25s;transition-duration:.9s}
+  .motion .step-n{transition-delay:0s}
+  .motion .step h3,.motion .step p{transition-delay:.12s}
+  .motion .steps.in .step:not(.in)::before{transform:scaleY(0)}
+  .motion .steps.in .step:not(.in) .step-n{transform:scale(0)}
+  .motion .steps.in .step:not(.in) h3,.motion .steps.in .step:not(.in) p{opacity:0;transform:translateY(14px)}
+  .motion .step.in::before,.motion .step.in .step-n,.motion .step.in h3,.motion .step.in p{transform:none;opacity:1}
 }
 
 /* ---------- ferramentas ---------- */
@@ -324,6 +333,8 @@ figcaption span{display:block;font-size:14px;color:var(--muted);line-height:1.45
   .track li + li{margin-top:28px}
   .track li::after,.track li:nth-child(even)::after{left:0;right:auto}
   .track-card::before{display:none}
+  .track li.reveal,.track li:nth-child(even).reveal{transform:translateY(28px)}
+  .track li.reveal.in{transform:none}
 }
 
 /* ---------- contato ---------- */

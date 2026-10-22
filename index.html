@@ -11,7 +11,7 @@
   (function(){
     var t = null;
     try{ t = localStorage.getItem('tema'); }catch(e){}
-    if(t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    if(t !== 'dark') t = 'light';
     document.documentElement.setAttribute('data-theme', t);
   })();
 </script>
@@ -71,7 +71,7 @@
 
 <div class="topbar">
 <header class="wrap top">
-  <a class="top-name" href="#inicio">Luis Carlos | Engenheiro de Software</a>
+  <a class="top-name" href="#inicio">Luis Carlos<span class="top-role"> | Engenheiro de Software</span></a>
   <div class="top-right">
     <nav aria-label="Navegação principal">
       <a href="#projetos">Projetos</a>

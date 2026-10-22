@@ -128,7 +128,7 @@
 
   /* entradas na rolagem; irmãos entram em sequência */
   var revealSel = '.section > h2, .section-lead, .project-text > *, .stage, .minor > article, .how-head > *, .stack > div, .track li, .contact-panel > *';
-  var lineSel = '.project, .minor, .steps';
+  var lineSel = '.project, .minor, .steps, .step';
   var groups = new Map();
   document.querySelectorAll(revealSel).forEach(function(el){
     el.classList.add('reveal');
