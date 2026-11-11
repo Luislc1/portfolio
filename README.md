@@ -2,35 +2,34 @@
 
 Site pessoal de Luis Carlos de Queiroz Silva, engenheiro de software e desenvolvedor Flutter em Rio Verde (GO).
 
-O site mostra os apps que eu publiquei e mantenho, com as telas recriadas em HTML e funcionando como no celular: leituras chegando em tempo real no app da Comber, a compra de um ingresso no Atléticas e a geração de um link no LinkURL.
+Página única em tema escuro com o nome em destaque e dois mascotes, o Dash (Flutter) e o robô do Android. Eles acompanham a rolagem, podem ser arrastados e comentam o que aparece na tela. O site também tem demonstrações que funcionam no navegador: uma simulação de telemetria com alarme de temperatura, uma comparação entre requisições em paralelo e uma por vez, e as telas dos apps recriadas em HTML.
+
+O app de telemetria da Comber Indústria é da empresa e não é público. Por isso ele aparece só descrito, e a demonstração usa dados simulados.
 
 ## Projetos apresentados
 
 | Projeto | O que é | Situação |
 | --- | --- | --- |
-| **Telemetria industrial (Comber Indústria)** | App que acompanha em tempo real as máquinas da Comber, com alertas e pedidos de serviço. Flutter, MQTT, Node-RED e InfluxDB. | Em produção |
+| **Telemetria industrial (Comber Indústria)** | App que acompanha máquinas industriais em tempo real e avisa sobre alarmes. Flutter, MQTT, Node-RED e InfluxDB. Sem telas, por ser da empresa. | Em produção |
 | **Atléticas** | Marketplace de ingressos para festas universitárias, com Pix e cartão via Mercado Pago. Mais de 450 usuários. | App Store e Google Play |
 | **LinkURL** | Gera link do WhatsApp com a mensagem já escrita e o QR Code dele. | App Store, código aberto |
 | **Mux-Metrics** | TCC: plataforma de pesquisa longitudinal de experiência do usuário (AttrakDiff, UEQ e NASA-TLX). | Teste fechado |
 
 ## Como foi feito
 
-- HTML, CSS e JavaScript puros, sem framework e sem etapa de build.
-- As telas dos apps são HTML desenhado no tamanho real de um iPhone e reduzido com CSS. Logos e fotos são recortes das capturas originais.
-- Cada aparelho só anima enquanto está visível na tela.
-- Tema claro e escuro: segue o sistema na primeira visita e guarda a escolha no navegador.
+- HTML, CSS e JavaScript puros, num único arquivo, sem framework e sem etapa de build.
+- Os mascotes são SVG desenhados à mão, com física simples: caem, quicam, pulam entre as letras e os títulos e dormem quando ninguém mexe na página. O botão "Mascotes" no topo esconde os dois, e a escolha fica guardada no navegador.
 - As animações são desligadas para quem ativou a opção de reduzir movimento no sistema.
-- Fontes: [Archivo](https://fonts.google.com/specimen/Archivo) no site e [Inter](https://fonts.google.com/specimen/Inter) nas telas dos apps.
+- Fontes: [Inter](https://fonts.google.com/specimen/Inter) e [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono).
+- O Dash é a mascote do Flutter, do Google. O robô do Android é reproduzido a partir de obra criada e compartilhada pelo Google, nos termos da licença Creative Commons 3.0 Attribution.
 
 ## Estrutura
 
 ```
-index.html
+index.html        página, estilos, mascotes e demonstrações
 assets/
-  css/style.css   layout, tipografia e temas do site
   css/telas.css   réplicas das telas dos apps
-  js/main.js      animações, carrossel e troca de tema
-  img/            recortes das capturas dos apps
+  img/            imagens das telas do Atléticas
 ```
 
 ## Rodando localmente
